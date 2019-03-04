@@ -5,4 +5,13 @@ cache: npm
 
 script:
   - npm test
+
+before_deploy:
   - npm run build
+  - ls -a | grep -Ev "\.$|index.html|bundle.js|styles.css" | xargs rm -rf
+
+deploy:
+  provider: pages
+  skip-cleanup: true
+  github-token: $GITHUB_TOKEN
+  keep-history: true
