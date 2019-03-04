@@ -1,0 +1,109 @@
+body {
+  text-align: center;
+}
+
+#contenedor {
+  margin-bottom: .5em;
+  padding-bottom: .5em;
+  border-bottom: 1px solid darkgray;
+}
+
+.abstraction > .parameter::before {
+  content: 'λ';
+}
+
+.abstraction > .parameter::after {
+  content: '.';
+}
+
+.application, .abstraction {
+  border-radius: 4px;
+  margin: .1em .15em;
+  padding: 0 .05em;
+  background: #80808021;
+}
+
+.application .function {
+  margin-right: .3em;
+}
+/*
+.application > .function > .abstraction,
+.application > .argument > .application {
+    border-left: 1px solid black;
+    border-right: 1px solid black;
+}
+*/
+
+.application > .function > .application > .argument > .abstraction::before,
+.application > .function > .abstraction::before,
+.application > .argument > .application::before {
+  content: '(';
+}
+
+.application > .function > .application > .argument > .abstraction::after,
+.application > .function > .abstraction::after,
+.application > .argument > .application::after {
+  content: ')';
+}
+
+.hole {
+  background: orange;
+  width: 10px;
+  content: ' ';
+  height: 10px;
+  display: inline-block;
+  position: relative;
+  cursor: pointer;
+}
+
+.hole:hover {
+  background-color: yellow;
+}
+
+.hidden {
+  display: none;
+}
+
+.insert-variable {
+  right: 16px;
+  bottom: -25px;
+}
+
+.insert-variable, .insert-abstraction, .insert-application {
+  position: absolute;
+  display: inline-block;
+  background: red;
+  border-radius: 20px;
+  height: 20px;
+  width: 20px;
+  text-align: center;
+
+  cursor: pointer;
+  transition-duration: .2s;
+}
+
+.insert-variable:hover, .insert-abstraction:hover, .insert-application:hover {
+  transform: scale(1.1);
+}
+
+.insert-abstraction {
+  bottom: -30px;
+  left: -5px;
+}
+
+.insert-application {
+  left: 16px;
+  bottom: -25px;
+  font-size: .8em;
+  line-height: 1.4em;
+}
+
+.hole .actions {
+  display: block;
+  transition-duration: .5s;
+  transform: translateY(10px) scale(1);
+}
+
+.hole .actions.hidden {
+  transform: translateY(10px) scale(0);
+}
