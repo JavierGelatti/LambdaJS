@@ -86,7 +86,9 @@ fabric.properties
 node_modules/
 
 # Generated sources
-bundle.js
-bundle.js.map
-styles.css
-styles.css.map
+/index.html
+/post.html
+/bundle.js
+/bundle.js.map
+/styles.css
+/styles.css.map

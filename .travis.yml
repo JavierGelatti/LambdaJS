@@ -8,7 +8,7 @@ script:
 
 before_deploy:
   - npm run build
-  - ls -a | grep -Ev "\.$|index.html|bundle.js|styles.css" | xargs rm -rf
+  - ls -a | grep -Ev "\.$|post.html|index.html|bundle.js|styles.css" | xargs rm -rf
 
 deploy:
   provider: pages

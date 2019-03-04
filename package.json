@@ -7,7 +7,8 @@
     "test": "tests"
   },
   "dependencies": {
-    "arcsecond": "^1.3.0"
+    "arcsecond": "^1.3.0",
+    "html-import-partials": "^1.0.1"
   },
   "devDependencies": {
     "@babel/cli": "^7.2.3",
@@ -28,10 +29,11 @@
     "prefix_css": "postcss styles.css --replace --no-map --use autoprefixer",
     "build_dev_css": "npm run build_dev_sass && npm run prefix_dev_css",
     "build_css": "npm run build_sass && npm run prefix_css",
+    "build_html": "html-import-partials src/index.html src/post.html --out .",
     "build_dev_js": "browserify -d -t [ babelify --global --presets [ @babel/preset-env ] ] --outfile bundle.js script.js",
-    "dev_build": "npm run build_dev_js && npm run build_dev_css",
+    "dev_build": "npm run build_dev_js && npm run build_dev_css && npm run build_html",
     "uglify": "uglifyjs --compress --mangle --output bundle.js -- bundle.js",
-    "build": "npm run build_dev_js && npm run uglify && npm run build_css",
+    "build": "npm run build_dev_js && npm run uglify && npm run build_css && npm run build_html",
     "test": "node tests.js"
   },
   "author": "Facundo Javier Gelatti",
