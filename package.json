@@ -18,6 +18,7 @@
     "autoprefixer": "^9.4.9",
     "babelify": "^10.0.0",
     "browserify": "^16.2.3",
+    "marked": "^0.6.1",
     "node-sass": "^4.11.0",
     "postcss-cli": "^6.1.2",
     "uglify-js": "^3.4.9"
@@ -29,7 +30,8 @@
     "prefix_css": "postcss styles.css --replace --no-map --use autoprefixer",
     "build_dev_css": "npm run build_dev_sass && npm run prefix_dev_css",
     "build_css": "npm run build_sass && npm run prefix_css",
-    "build_html": "html-import-partials src/index.html src/post.html --out .",
+    "build_markdown": "marked --output src/content.html src/content.md",
+    "build_html": "npm run build_markdown && html-import-partials src/index.html src/post.html --out .",
     "build_dev_js": "browserify -d -t [ babelify --global --presets [ @babel/preset-env ] ] --outfile bundle.js script.js",
     "dev_build": "npm run build_dev_js && npm run build_dev_css && npm run build_html",
     "uglify": "uglifyjs --compress --mangle --output bundle.js -- bundle.js",

@@ -92,3 +92,4 @@ node_modules/
 /bundle.js.map
 /styles.css
 /styles.css.map
+/src/content.html
