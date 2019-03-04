@@ -87,4 +87,6 @@ node_modules/
 
 # Generated sources
 bundle.js
+bundle.js.map
 styles.css
+styles.css.map
