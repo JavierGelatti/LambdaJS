@@ -95,9 +95,9 @@ class Hole extends Expression{
         if (this.isEmpty()) {
             let element = htmlToElement(`<span class="hole">
                 <span class="actions hidden">
-                    <span class="insert-variable">x</span>
-                    <span class="insert-abstraction">λ</span>
-                    <span class="insert-application">()</span>
+                    <span class="insert-variable"></span>
+                    <span class="insert-abstraction"></span>
+                    <span class="insert-application"></span>
                 </span>
             </span>`)
             element.astNode = this

@@ -1,109 +1,127 @@
-body {
-  text-align: center;
-}
-
 #contenedor {
+  font-size: 1.5em;
   margin-bottom: .5em;
   padding-bottom: .5em;
   border-bottom: 1px solid darkgray;
-}
 
-.abstraction > .parameter::before {
-  content: 'λ';
-}
+  .abstraction > .parameter::before {
+    content: 'λ';
+  }
 
-.abstraction > .parameter::after {
-  content: '.';
-}
+  .abstraction > .parameter::after {
+    content: '.';
+  }
 
-.application, .abstraction {
-  border-radius: 4px;
-  margin: .1em .15em;
-  padding: 0 .05em;
-  background: #80808021;
-}
+  .application, .abstraction {
+    border-radius: .3em;
+    padding: .3em;
+    background: #80808020;
+    display: inline-block;
+  }
 
-.application .function {
-  margin-right: .3em;
-}
-/*
-.application > .function > .abstraction,
-.application > .argument > .application {
-    border-left: 1px solid black;
-    border-right: 1px solid black;
-}
-*/
+  .application .function {
+    margin-right: .3em;
+  }
 
-.application > .function > .application > .argument > .abstraction::before,
-.application > .function > .abstraction::before,
-.application > .argument > .application::before {
-  content: '(';
-}
+  /*
+  .application > .function > .abstraction,
+  .application > .argument > .application {
+      border-left: 1px solid black;
+      border-right: 1px solid black;
+  }
+  */
 
-.application > .function > .application > .argument > .abstraction::after,
-.application > .function > .abstraction::after,
-.application > .argument > .application::after {
-  content: ')';
-}
+  .application > .function > .application > .argument > .abstraction::before,
+  .application > .function > .abstraction::before,
+  .application > .argument > .application::before {
+    content: '(';
+  }
 
-.hole {
-  background: orange;
-  width: 10px;
-  content: ' ';
-  height: 10px;
-  display: inline-block;
-  position: relative;
-  cursor: pointer;
-}
+  .application > .function > .application > .argument > .abstraction::after,
+  .application > .function > .abstraction::after,
+  .application > .argument > .application::after {
+    content: ')';
+  }
 
-.hole:hover {
-  background-color: yellow;
-}
+  .hole {
+    background: orange;
+    content: ' ';
+    width: .7em;
+    height: .7em;
+    display: inline-block;
+    position: relative;
+    cursor: pointer;
+  }
 
-.hidden {
-  display: none;
-}
+  .hole:hover {
+    background-color: yellow;
+  }
 
-.insert-variable {
-  right: 16px;
-  bottom: -25px;
-}
+  .hidden {
+    display: none;
+    visibility: visible;
+    position: initial;
+    text-indent: 0;
+  }
 
-.insert-variable, .insert-abstraction, .insert-application {
-  position: absolute;
-  display: inline-block;
-  background: red;
-  border-radius: 20px;
-  height: 20px;
-  width: 20px;
-  text-align: center;
+  .insert-variable, .insert-abstraction, .insert-application {
+    position: absolute;
+    display: inline-block;
+    background: red;
+    border-radius: .6em;
+    height: 1.2em;
+    width: 1.2em;
+    text-align: center;
 
-  cursor: pointer;
-  transition-duration: .2s;
-}
+    cursor: pointer;
+    transition-duration: .2s;
 
-.insert-variable:hover, .insert-abstraction:hover, .insert-application:hover {
-  transform: scale(1.1);
-}
+    &:hover {
+      transform: scale(1.1);
+    }
+    &::after {
+      display: block;
+    }
+  }
 
-.insert-abstraction {
-  bottom: -30px;
-  left: -5px;
-}
+  .insert-variable {
+    right: 1em;
+    bottom: -1.8em;
 
-.insert-application {
-  left: 16px;
-  bottom: -25px;
-  font-size: .8em;
-  line-height: 1.4em;
-}
+    &::after {
+      content: 'x';
+      line-height: 1.1em;
+    }
+  }
 
-.hole .actions {
-  display: block;
-  transition-duration: .5s;
-  transform: translateY(10px) scale(1);
-}
+  .insert-abstraction {
+    bottom: -2.2em;
+    left: -.25em;
 
-.hole .actions.hidden {
-  transform: translateY(10px) scale(0);
+    &::after {
+      content: 'λ';
+      line-height: 1.2em;
+    }
+  }
+
+  .insert-application {
+    left: 1em;
+    bottom: -1.8em;
+
+    &::after {
+      content: '()';
+      font-size: .8em;
+      line-height: 1.4em;
+    }
+  }
+
+  .hole .actions {
+    display: block;
+    transition-duration: .5s;
+    transform: translateY(10px) scale(1);
+  }
+
+  .hole .actions.hidden {
+    transform: translateY(10px) scale(0);
+  }
 }
