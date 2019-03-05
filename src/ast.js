@@ -35,7 +35,7 @@ class Expression {
         throw 'subclass responsibility'
     }
 
-    toHtml() {
+    accept(visitor) {
         throw 'subclass responsibility'
     }
 }
@@ -91,20 +91,8 @@ class Hole extends Expression{
             return this.value.toString()
     }
 
-    toHtml() {
-        if (this.isEmpty()) {
-            let element = htmlToElement(`<span class="hole">
-                <span class="actions hidden">
-                    <span class="insert-variable"></span>
-                    <span class="insert-abstraction"></span>
-                    <span class="insert-application"></span>
-                </span>
-            </span>`)
-            element.astNode = this
-            return element
-        } else {
-            return this.value.toHtml()
-        }
+    accept(visitor) {
+        return visitor.visitHole(this)
     }
 }
 
@@ -143,10 +131,8 @@ class Variable extends Expression {
         return this.name
     }
 
-    toHtml() {
-        let element = htmlToElement(`<span class="variable">${this.name}</span>`)
-        element.astNode = this
-        return element
+    accept(visitor) {
+        return visitor.visitVariable(this)
     }
 }
 
@@ -203,19 +189,8 @@ class Abstraction extends Expression {
         return `(λ${this.boundVariable.toString()}.${this.body.toString()})`
     }
 
-    toHtml() {
-        let parameterElement = htmlToElement(`<span class="parameter"></span>`)
-        parameterElement.appendChild(this.boundVariable.toHtml())
-
-        let bodyElement = htmlToElement(`<span class="body"></span>`)
-        bodyElement.appendChild(this.body.toHtml())
-
-        let abstractionElement = htmlToElement(`<span class="abstraction"></span>`)
-        abstractionElement.appendChild(parameterElement)
-        abstractionElement.appendChild(bodyElement)
-        abstractionElement.astNode = this
-
-        return abstractionElement
+    accept(visitor) {
+        return visitor.visitAbstraction(this)
     }
 }
 
@@ -259,19 +234,8 @@ class Application extends Expression {
         return `(${this.abstraction.toString()} ${this.argument.toString()})`
     }
 
-    toHtml() {
-        let functionElement = htmlToElement(`<span class="function"></span>`)
-        functionElement.appendChild(this.abstraction.toHtml())
-
-        let argumentElement = htmlToElement(`<span class="argument"></span>`)
-        argumentElement.appendChild(this.argument.toHtml())
-
-        let applicationElement = htmlToElement(`<span class="application"></span>`)
-        applicationElement.appendChild(functionElement)
-        applicationElement.appendChild(argumentElement)
-        applicationElement.astNode = this
-
-        return applicationElement
+    accept(visitor) {
+        return visitor.visitApplication(this)
     }
 }
 
@@ -289,13 +253,6 @@ function application(abstraction, argument) {
 
 function apply(abstraction, argument) {
     return application(abstraction, argument).betaReduced()
-}
-
-function htmlToElement(html) {
-    var template = document.createElement('template');
-    html = html.trim(); // Never return a text node of whitespace as the result
-    template.innerHTML = html;
-    return template.content.firstChild;
 }
 
 if (typeof module !== 'undefined') {

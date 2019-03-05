@@ -1,4 +1,5 @@
 const { parseExpression } = require('./src/parser')
+const { toHtml } = require('./src/toHtml')
 
 function parse(x) { return parseExpression(x) }
 
@@ -7,7 +8,7 @@ let contenedor = document.getElementById("contenedor")
 
 let render = () => {
     contenedor.innerHTML = ''
-    contenedor.appendChild(expression.toHtml())
+    contenedor.appendChild(toHtml(expression))
 
     contenedor.querySelectorAll('.hole').
     forEach(hole => hole.addEventListener('click', evt => {
