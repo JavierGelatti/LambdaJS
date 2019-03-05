@@ -182,31 +182,31 @@
     .insert-variable {
       right: 1em;
       bottom: -1.8em;
+      line-height: 1.1em;
 
       &::after {
         content: 'x';
-        line-height: 1.1em;
       }
     }
 
     .insert-abstraction {
       bottom: -2.2em;
       left: -.25em;
+      line-height: 1.2em;
 
       &::after {
         content: 'λ';
-        line-height: 1.2em;
       }
     }
 
     .insert-application {
       left: 1em;
       bottom: -1.8em;
+      line-height: 1em;
 
       &::after {
         content: '()';
         font-size: .8em;
-        line-height: 1.4em;
       }
     }
   }
