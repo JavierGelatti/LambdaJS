@@ -33,7 +33,7 @@ function setUpActionsOn(selector, actions) {
         })
 
         for (const action in actions) {
-            onClick(element.querySelector('.' + action), () => actions[action](element))
+            onClick(element.querySelector('.' + action), () => actions[action](element.astNode))
         }
     })
 }
@@ -52,41 +52,41 @@ let render = () => {
         'insert-variable': selectedHole => {
             let variableName = prompt('Variable name?')
             if (variableName !== null && variableName.length !== 0) {
-                expression = expression.replace(selectedHole.astNode, variable(variableName))
+                expression = expression.replace(selectedHole, variable(variableName))
                 render()
             }
         },
         'insert-abstraction': selectedHole => {
             let variableName = prompt('Variable name?')
             if (variableName !== null && variableName.length !== 0) {
-                expression = expression.replace(selectedHole.astNode, lambda(variableName, hole()))
+                expression = expression.replace(selectedHole, lambda(variableName, hole()))
                 render()
             }
         },
         'insert-application': selectedHole => {
-            expression = expression.replace(selectedHole.astNode, application(hole(), hole()))
+            expression = expression.replace(selectedHole, application(hole(), hole()))
             render()
         }
     })
 
     setUpActionsOn('.abstraction, .application, *:not(.parameter) > .variable', {
         'delete': node => {
-            expression = expression.replace(node.astNode, hole())
+            expression = expression.replace(node, hole())
             render()
         },
         'wrap-lambda': node => {
             let variableName = prompt('Variable name?')
             if (variableName !== null && variableName.length !== 0) {
-                expression = expression.replace(node.astNode, lambda(variableName, node.astNode))
+                expression = expression.replace(node, lambda(variableName, node))
                 render()
             }
         },
         'wrap-application-argument': node => {
-            expression = expression.replace(node.astNode, application(hole(), node.astNode))
+            expression = expression.replace(node, application(hole(), node))
             render()
         },
         'wrap-application-function': node => {
-            expression = expression.replace(node.astNode, application(node.astNode, hole()))
+            expression = expression.replace(node, application(node, hole()))
             render()
         },
     })
