@@ -18,8 +18,12 @@ function onClick(element, handler) {
 function setUpActionsOn(selector, actions) {
     contenedor.querySelectorAll(selector).forEach(element => {
         on('click', element, () => {
-            hideAllActions()
-            element.querySelector('.actions').classList.toggle('hidden')
+            if (element.classList.contains('active')) {
+                deactivateAllNodes()
+            } else {
+                deactivateAllNodes()
+                element.classList.add('active')
+            }
         })
         on('mouseover', element, () => {
             element.classList.add('hovered')
@@ -34,9 +38,11 @@ function setUpActionsOn(selector, actions) {
     })
 }
 
-function hideAllActions() {
-    contenedor.querySelectorAll('.actions').forEach(a => a.classList.add('hidden'))
+function deactivateAllNodes() {
+    contenedor.querySelectorAll('.active').forEach(a => a.classList.remove('active'))
 }
+
+document.body.addEventListener('click', deactivateAllNodes)
 
 let render = () => {
     contenedor.innerHTML = ''
@@ -85,8 +91,6 @@ let render = () => {
         },
     })
 }
-
-document.body.addEventListener('click', evt => hideAllActions())
 
 document.getElementById("evaluar").addEventListener("click", evt => {
     expression = expression.fullBetaReduce()

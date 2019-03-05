@@ -17,7 +17,7 @@ class VisitorHtml {
 
         let abstractionElement = htmlToElement(`<span class="abstraction"></span>`)
         abstractionElement.insertAdjacentHTML('beforeend', `<span class="actions-container">
-            <span class="actions hidden">
+            <span class="actions">
                 <span class="delete"></span>
                 <span class="wrap-lambda"></span>
                 <span class="wrap-application-argument"></span>
@@ -40,7 +40,7 @@ class VisitorHtml {
 
         let applicationElement = htmlToElement(`<span class="application"></span>`)
         applicationElement.insertAdjacentHTML('beforeend', `<span class="actions-container">
-            <span class="actions hidden">
+            <span class="actions">
                 <span class="delete"></span>
                 <span class="wrap-lambda"></span>
                 <span class="wrap-application-argument"></span>
@@ -56,7 +56,7 @@ class VisitorHtml {
 
     visitHole(hole) {
         let element = htmlToElement(`<span class="hole">
-            <span class="actions hidden">
+            <span class="actions">
                 <span class="insert-variable"></span>
                 <span class="insert-abstraction"></span>
                 <span class="insert-application"></span>
@@ -69,7 +69,7 @@ class VisitorHtml {
     visitVariable(variable) {
         let element = htmlToElement(`<span class="variable"></span>`)
         element.insertAdjacentHTML('beforeend', `<span class="actions-container">
-            <span class="actions hidden">
+            <span class="actions">
                 <span class="delete"></span>
                 <span class="wrap-lambda"></span>
                 <span class="wrap-application-argument"></span>

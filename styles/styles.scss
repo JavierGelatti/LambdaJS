@@ -83,14 +83,6 @@
     }
   }
 
-  // Override from 10Pines blog styles
-  .hidden {
-    display: none;
-    visibility: visible;
-    position: initial;
-    text-indent: 0;
-  }
-
   .hole,
   .actions-container {
     display: inline-block;
@@ -121,14 +113,16 @@
 
   span {
     .actions {
+      transform: translateY(10px) translateX(-50px);
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    &.active > .actions,
+    &.active > .actions-container .actions {
       transform: translateY(10px);
       opacity: 1;
       visibility: visible;
-      &.hidden {
-        transform: translateY(10px) translateX(-50px);
-        opacity: 0;
-        visibility: hidden;
-      }
     }
 
     .delete {
@@ -174,10 +168,10 @@
 
   .hole {
     .actions {
+      transform: translateY(10px) scale(0);
+    }
+    &.active > .actions {
       transform: translateY(10px) scale(1);
-      &.hidden {
-        transform: translateY(10px) scale(0);
-      }
     }
     .insert-variable {
       right: 1em;
