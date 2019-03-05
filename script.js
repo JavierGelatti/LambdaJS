@@ -47,7 +47,7 @@ let render = () => {
         })
     })
 
-    contenedor.querySelectorAll('.abstraction, .application').forEach(node => {
+    contenedor.querySelectorAll('.abstraction, .application, *:not(.parameter) > .variable').forEach(node => {
         node.addEventListener('click', evt => {
             hideAllActions()
             node.querySelector('.actions').classList.toggle('hidden')
@@ -88,10 +88,10 @@ let render = () => {
             evt.stopPropagation()
         })
     })
-    contenedor.querySelectorAll('.abstraction, .application, .hole').
+    contenedor.querySelectorAll('.abstraction, .application, .hole, *:not(.parameter) > .variable').
         forEach(abstraction => {
             abstraction.addEventListener('mouseover', evt => {
-                contenedor.querySelectorAll('.abstraction, .application, .hole').forEach(a => a.classList.remove('hovered'))
+                contenedor.querySelectorAll('.abstraction, .application, .hole, *:not(.parameter) > .variable').forEach(a => a.classList.remove('hovered'))
                 abstraction.classList.add('hovered')
                 evt.stopPropagation()
             })

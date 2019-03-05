@@ -11,6 +11,22 @@
     display: inline-block;
   }
 
+  .variable {
+    border-radius: .3em;
+    padding: 0 .2em;
+    background: #80808020;
+    display: inline-block;
+
+    &.hovered {
+      background: lightgreen;
+    }
+  }
+
+  .parameter .variable {
+    padding: 0;
+    background: transparent;
+  }
+
   .abstraction, .application {
     cursor: pointer;
 
