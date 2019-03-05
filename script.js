@@ -20,18 +20,25 @@ let render = () => {
             hole.querySelector('.actions').classList.toggle('hidden')
 
             hole.querySelector('.insert-variable').addEventListener('click', evt => {
+                hideAllActions()
                 let variableName = prompt('Variable name?')
-                expression = expression.replace(hole.astNode, parse(variableName))
-                render()
+                if (variableName !== null && variableName.length !== 0) {
+                    expression = expression.replace(hole.astNode, parse(variableName))
+                    render()
+                }
                 evt.stopPropagation()
             })
             hole.querySelector('.insert-abstraction').addEventListener('click', evt => {
+                hideAllActions()
                 let variableName = prompt('Variable name?')
-                expression = expression.replace(hole.astNode, parse('λ' + variableName + '._'))
-                render()
+                if (variableName !== null && variableName.length !== 0) {
+                    expression = expression.replace(hole.astNode, parse('λ' + variableName + '._'))
+                    render()
+                }
                 evt.stopPropagation()
             })
             hole.querySelector('.insert-application').addEventListener('click', evt => {
+                hideAllActions()
                 expression = expression.replace(hole.astNode, parse('_ _'))
                 render()
                 evt.stopPropagation()
@@ -46,19 +53,24 @@ let render = () => {
             node.querySelector('.actions').classList.toggle('hidden')
 
             node.querySelector('.delete').addEventListener('click', evt => {
+                hideAllActions()
                 expression = expression.replace(node.astNode, parse('_'))
                 render()
                 evt.stopPropagation()
             })
             node.querySelector('.wrap-lambda').addEventListener('click', evt => {
+                hideAllActions()
                 let variableName = prompt('Variable name?')
-                let lambda = parse('λ' + variableName + '._')
-                lambda.body = node.astNode
-                expression = expression.replace(node.astNode, lambda)
-                render()
+                if (variableName !== null && variableName.length !== 0) {
+                    let lambda = parse('λ' + variableName + '._')
+                    lambda.body = node.astNode
+                    expression = expression.replace(node.astNode, lambda)
+                    render()
+                }
                 evt.stopPropagation()
             })
             node.querySelector('.wrap-application-argument').addEventListener('click', evt => {
+                hideAllActions()
                 let application = parse('(_ _)')
                 application.argument = node.astNode
                 expression = expression.replace(node.astNode, application)
@@ -66,6 +78,7 @@ let render = () => {
                 evt.stopPropagation()
             })
             node.querySelector('.wrap-application-function').addEventListener('click', evt => {
+                hideAllActions()
                 let application = parse('(_ _)')
                 application.abstraction = node.astNode
                 expression = expression.replace(node.astNode, application)
