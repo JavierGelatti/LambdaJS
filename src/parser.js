@@ -58,6 +58,4 @@ function parseExpression(text) {
     return parse(completeExpression)(text).value
 }
 
-if (typeof module !== 'undefined') {
-    module.exports = { parseExpression }
-}
+module.exports = { parseExpression }

@@ -71,6 +71,4 @@ function toHtml(expression) {
     return new VisitorHtml().toHtml(expression)
 }
 
-if (typeof module !== 'undefined') {
-    module.exports = { toHtml }
-}
+module.exports = { toHtml }

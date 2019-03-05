@@ -255,6 +255,4 @@ function apply(abstraction, argument) {
     return application(abstraction, argument).betaReduced()
 }
 
-if (typeof module !== 'undefined') {
-    module.exports = { Variable, Abstraction, Application, Hole, variable, application, lambda, apply }
-}
+module.exports = { Variable, Abstraction, Application, Hole, variable, application, lambda, apply }
