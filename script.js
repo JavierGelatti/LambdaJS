@@ -21,18 +21,18 @@ let render = () => {
 
             hole.querySelector('.insert-variable').addEventListener('click', evt => {
                 let variableName = prompt('Variable name?')
-                hole.astNode.value = parse(variableName)
+                expression = expression.replace(hole.astNode, parse(variableName))
                 render()
                 evt.stopPropagation()
             })
             hole.querySelector('.insert-abstraction').addEventListener('click', evt => {
                 let variableName = prompt('Variable name?')
-                hole.astNode.value = parse('λ' + variableName + '._')
+                expression = expression.replace(hole.astNode, parse('λ' + variableName + '._'))
                 render()
                 evt.stopPropagation()
             })
             hole.querySelector('.insert-application').addEventListener('click', evt => {
-                hole.astNode.value = parse('_ _')
+                expression = expression.replace(hole.astNode, parse('_ _'))
                 render()
                 evt.stopPropagation()
             })
@@ -89,12 +89,8 @@ let render = () => {
 document.body.addEventListener('click', evt => hideAllActions())
 
 document.getElementById("evaluar").addEventListener("click", evt => {
-    if (!expression.toString().includes("_")) {
-        expression = expression.fullBetaReduce()
-        render()
-    } else {
-        alert("La expresión no está completa!")
-    }
+    expression = expression.fullBetaReduce()
+    render()
 })
 
 render()

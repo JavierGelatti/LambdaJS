@@ -45,54 +45,28 @@ class Expression {
 }
 
 class Hole extends Expression{
-    initialize() {
-        this.value = null
-    }
-
-    isEmpty() {
-        return this.value == null
-    }
-
     betaReduced() {
-        if (this.isEmpty())
-            return this
-        else
-            return this.value.betaReduced()
+        return this
     }
 
     equals(other) {
-        if (this.isEmpty())
-            return other === this
-        else
-            return this.value.equals(other)
+        return other === this
     }
 
     freeVariables() {
-        if (this.isEmpty())
-            return []
-        else
-            return this.value.freeVariables()
+        return []
     }
 
     replaceFreeVariable(oldVariable, newValue) {
-        if (this.isEmpty())
-            return this
-        else
-            return this.value.replaceFreeVariable(oldVariable, newValue)
+        return this
     }
 
     applyTo(argument) {
-        if (this.isEmpty())
-            return new Application(this, argument)
-        else
-            return this.value.applyTo(argument)
+        return new Application(this, argument)
     }
 
     toString() {
-        if (this.isEmpty())
-            return '_'
-        else
-            return this.value.toString()
+        return '_'
     }
 
     accept(visitor) {
@@ -100,10 +74,10 @@ class Hole extends Expression{
     }
 
     replace(toBeReplaced, replacement) {
-        if (this.isEmpty())
-            return this
+        if (this === toBeReplaced)
+            return replacement
         else
-            return this.value.replace(toBeReplaced, replacement)
+            return this
     }
 }
 

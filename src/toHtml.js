@@ -55,19 +55,15 @@ class VisitorHtml {
     }
 
     visitHole(hole) {
-        if (hole.isEmpty()) {
-            let element = htmlToElement(`<span class="hole">
-                <span class="actions hidden">
-                    <span class="insert-variable"></span>
-                    <span class="insert-abstraction"></span>
-                    <span class="insert-application"></span>
-                </span>
-            </span>`)
-            element.astNode = hole
-            return element
-        } else {
-            return this.toHtml(hole.value)
-        }
+        let element = htmlToElement(`<span class="hole">
+            <span class="actions hidden">
+                <span class="insert-variable"></span>
+                <span class="insert-abstraction"></span>
+                <span class="insert-application"></span>
+            </span>
+        </span>`)
+        element.astNode = hole
+        return element
     }
 
     visitVariable(variable) {
