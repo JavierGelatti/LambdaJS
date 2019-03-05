@@ -57,7 +57,7 @@ let render = () => {
     setUpActionsOn('.hole', {
         'insert-variable': (selectedHole, expression) => {
             let variableName = prompt('Variable name?')
-            if (variableName !== null && variableName.length !== 0) {
+            if (variableName) {
                 return expression.replace(selectedHole, variable(variableName))
             } else {
                 return expression
@@ -65,7 +65,7 @@ let render = () => {
         },
         'insert-abstraction': (selectedHole, expression) => {
             let variableName = prompt('Variable name?')
-            if (variableName !== null && variableName.length !== 0) {
+            if (variableName) {
                 return expression.replace(selectedHole, lambda(variableName, hole()))
             } else {
                 return expression
@@ -82,7 +82,7 @@ let render = () => {
         },
         'wrap-lambda': (node, expression) => {
             let variableName = prompt('Variable name?')
-            if (variableName !== null && variableName.length !== 0) {
+            if (variableName) {
                 return expression.replace(node, lambda(variableName, node))
             } else {
                 return expression
