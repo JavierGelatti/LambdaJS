@@ -15,6 +15,13 @@ function onClick(element, handler) {
     return on('click', element, handler)
 }
 
+function updateExpression(newExpression) {
+    if (expression !== newExpression) {
+        expression = newExpression
+        render()
+    }
+}
+
 function setUpActionsOn(selector, actions) {
     contenedor.querySelectorAll(selector).forEach(element => {
         on('click', element, () => {
@@ -35,10 +42,7 @@ function setUpActionsOn(selector, actions) {
         for (const action in actions) {
             onClick(element.querySelector('.' + action), () => {
                 let newExpression = actions[action](element.astNode, expression)
-                if (expression !== newExpression) {
-                    expression = newExpression
-                    render()
-                }
+                updateExpression(newExpression)
             })
         }
     })
@@ -97,9 +101,8 @@ let render = () => {
     })
 }
 
-document.getElementById("evaluar").addEventListener("click", evt => {
-    expression = expression.fullBetaReduce()
-    render()
+onClick(document.getElementById("evaluar"), () => {
+    updateExpression(expression.fullBetaReduce())
 })
 
 render()
