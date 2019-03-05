@@ -10,6 +10,7 @@
     background: #80808020;
     display: inline-block;
     user-select: none;
+    white-space: nowrap;
   }
 
   .variable {
@@ -98,9 +99,17 @@
         height: 1.2em;
         width: 1.2em;
         text-align: center;
+        overflow: hidden;
 
         cursor: pointer;
         transition-duration: .2s;
+
+        &::after {
+          // Center overflowing text
+          text-align: center;
+          margin-left: -100%;
+          margin-right: -100%;
+        }
 
         &:hover {
           transform: scale(1.1);
@@ -157,7 +166,7 @@
 
       &::after {
         content: '(_ x)';
-        font-size: .6em;
+        font-size: .55em;
       }
     }
     .wrap-application-function {
@@ -167,7 +176,7 @@
 
       &::after {
         content: '(f _)';
-        font-size: .6em;
+        font-size: .55em;
       }
     }
   }
