@@ -67,7 +67,7 @@ class VisitorHtml {
     }
 
     visitVariable(variable) {
-        let element = htmlToElement(`<span class="variable">${variable.name}</span>`)
+        let element = htmlToElement(`<span class="variable"></span>`)
         element.insertAdjacentHTML('beforeend', `<span class="actions-container">
             <span class="actions hidden">
                 <span class="delete"></span>
@@ -76,6 +76,7 @@ class VisitorHtml {
                 <span class="wrap-application-function"></span>
             </span>
         </span>`)
+        element.appendChild(document.createTextNode(variable.name))
         element.astNode = variable
         return element
     }
