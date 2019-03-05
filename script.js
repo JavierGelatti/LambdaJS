@@ -6,10 +6,6 @@ function parse(x) { return parseExpression(x) }
 let expression = parse("(λx.λy._) a b")
 let contenedor = document.getElementById("contenedor")
 
-function hideAllActions() {
-    contenedor.querySelectorAll('.actions').forEach(a => a.classList.add('hidden'))
-}
-
 function on(event, element, handler) {
     element.addEventListener(event, event => {
         handler()
@@ -21,50 +17,60 @@ function onClick(element, handler) {
     return on('click', element, handler)
 }
 
+function setUpActionsOn(selector, actions) {
+    contenedor.querySelectorAll(selector).forEach(element => {
+        on('click', element, () => {
+            hideAllActions()
+            element.querySelector('.actions').classList.toggle('hidden')
+        })
+        on('mouseover', element, () => {
+            element.classList.add('hovered')
+        })
+        on('mouseout', element, () => {
+            element.classList.remove('hovered')
+        })
+
+        for (const action in actions) {
+            onClick(element.querySelector('.' + action), () => actions[action](element))
+        }
+    })
+}
+
+function hideAllActions() {
+    contenedor.querySelectorAll('.actions').forEach(a => a.classList.add('hidden'))
+}
+
 let render = () => {
     contenedor.innerHTML = ''
     contenedor.appendChild(toHtml(expression))
 
-    contenedor.querySelectorAll('.hole').forEach(hole => {
-        onClick(hole, () => {
-            hideAllActions()
-            hole.querySelector('.actions').classList.toggle('hidden')
-        })
-
-        onClick(hole.querySelector('.insert-variable'), () => {
+    setUpActionsOn('.hole', {
+        'insert-variable': hole => {
             let variableName = prompt('Variable name?')
             if (variableName !== null && variableName.length !== 0) {
                 expression = expression.replace(hole.astNode, parse(variableName))
                 render()
             }
-        })
-
-        onClick(hole.querySelector('.insert-abstraction'), () => {
+        },
+        'insert-abstraction': hole => {
             let variableName = prompt('Variable name?')
             if (variableName !== null && variableName.length !== 0) {
                 expression = expression.replace(hole.astNode, parse('λ' + variableName + '._'))
                 render()
             }
-        })
-
-        onClick(hole.querySelector('.insert-application'), () => {
+        },
+        'insert-application': hole => {
             expression = expression.replace(hole.astNode, parse('_ _'))
             render()
-        })
+        }
     })
 
-    contenedor.querySelectorAll('.abstraction, .application, *:not(.parameter) > .variable').forEach(node => {
-        onClick(node, () => {
-            hideAllActions()
-            node.querySelector('.actions').classList.toggle('hidden')
-        })
-
-        onClick(node.querySelector('.delete'), () => {
+    setUpActionsOn('.abstraction, .application, *:not(.parameter) > .variable', {
+        'delete': node => {
             expression = expression.replace(node.astNode, parse('_'))
             render()
-        })
-
-        onClick(node.querySelector('.wrap-lambda'), () => {
+        },
+        'wrap-lambda': node => {
             let variableName = prompt('Variable name?')
             if (variableName !== null && variableName.length !== 0) {
                 let lambda = parse('λ' + variableName + '._')
@@ -72,34 +78,20 @@ let render = () => {
                 expression = expression.replace(node.astNode, lambda)
                 render()
             }
-        })
-
-        onClick(node.querySelector('.wrap-application-argument'), () => {
+        },
+        'wrap-application-argument': node => {
             let application = parse('(_ _)')
             application.argument = node.astNode
             expression = expression.replace(node.astNode, application)
             render()
-        })
-
-        onClick(node.querySelector('.wrap-application-function'), () => {
+        },
+        'wrap-application-function': node => {
             let application = parse('(_ _)')
             application.abstraction = node.astNode
             expression = expression.replace(node.astNode, application)
             render()
-        })
+        },
     })
-
-    contenedor.querySelectorAll('.abstraction, .application, .hole, *:not(.parameter) > .variable').
-        forEach(abstraction => {
-            on('mouseover', abstraction, () => {
-                contenedor.querySelectorAll('.abstraction, .application, .hole, *:not(.parameter) > .variable').
-                    forEach(a => a.classList.remove('hovered'))
-                abstraction.classList.add('hovered')
-            })
-            on('mouseout', abstraction, () => {
-                abstraction.classList.remove('hovered')
-            })
-        })
 }
 
 document.body.addEventListener('click', evt => hideAllActions())
