@@ -1,221 +1,230 @@
-#contenedor {
-  font-size: 1.5em;
-  margin-bottom: .5em;
-  padding-bottom: .5em;
-  border-bottom: 1px solid darkgray;
+#contenedor .lambda-calculus-expression {
+  display: inline-block;
 
-  .application, .abstraction {
-    border-radius: .3em;
-    padding: .3em;
-    background: #80808020;
+  .actions {
+    display: block;
+  }
+
+  .expression {
+    font-size: 1.5em;
+    margin-bottom: .5em;
+    padding-bottom: .5em;
+    border-bottom: 1px solid darkgray;
     display: inline-block;
-    user-select: none;
-    white-space: nowrap;
-  }
 
-  .variable {
-    border-radius: .3em;
-    padding: 0 .2em;
-    background: #80808020;
-    display: inline-block;
-    user-select: none;
-  }
-
-  .parameter .variable {
-    padding: 0;
-    background: transparent;
-  }
-
-  .abstraction, .application {
-    cursor: pointer;
-  }
-
-  .application {
-    .function {
-      margin-right: .3em;
-    }
-  }
-
-  .abstraction {
-    & > .parameter::before {
-      content: 'λ';
+    .application, .abstraction {
+      border-radius: .3em;
+      padding: .3em;
+      background: #80808020;
+      display: inline-block;
+      user-select: none;
+      white-space: nowrap;
     }
 
-    & > .parameter::after {
-      content: '.';
-    }
-  }
-
-  /*
-  .application > .function > .abstraction,
-  .application > .argument > .application {
-      border-left: 1px solid black;
-      border-right: 1px solid black;
-  }
-  */
-
-  .application > .function > .application > .argument > .abstraction::before,
-  .application > .function > .abstraction::before,
-  .application > .argument > .application::before {
-    content: '(';
-  }
-
-  .application > .function > .application > .argument > .abstraction::after,
-  .application > .function > .abstraction::after,
-  .application > .argument > .application::after {
-    content: ')';
-  }
-
-  .hole {
-    background: orange;
-    content: ' ';
-    width: .7em;
-    height: .7em;
-    cursor: pointer;
-
-    &.hovered {
-      background-color: yellow;
+    .variable {
+      border-radius: .3em;
+      padding: 0 .2em;
+      background: #80808020;
+      display: inline-block;
+      user-select: none;
     }
 
-    &.active {
-      background-color: yellow !important;
-    }
-  }
-
-  .hole,
-  .actions-container {
-    display: inline-block;
-    position: relative;
-
-    .actions {
-      display: block;
-      transition-duration: .5s;
-
-      & > span {
-        position: absolute;
-        display: inline-block;
-        background: red;
-        border-radius: .6em;
-        height: 1.2em;
-        width: 1.2em;
-        text-align: center;
-        overflow: hidden;
-
-        cursor: pointer;
-        transition-duration: .2s;
-
-        &::after {
-          // Center overflowing text
-          text-align: center;
-          margin-left: -100%;
-          margin-right: -100%;
-        }
-
-        &:hover {
-          transform: scale(1.1);
-        }
-      }
-    }
-  }
-
-  span {
-    .actions {
-      transform: translateY(10px) translateX(-50px);
-      opacity: 0;
-      visibility: hidden;
+    .parameter .variable {
+      padding: 0;
+      background: transparent;
     }
 
-    &.hovered {
-      background: #90ee9060;
+    .abstraction, .application {
+      cursor: pointer;
     }
 
-    &.active {
-      background: lightgreen !important;
-
-      & > .actions,
-      & > .actions-container .actions {
-        transform: translateY(10px);
-        opacity: 1;
-        visibility: visible;
+    .application {
+      .function {
+        margin-right: .3em;
       }
     }
 
-    .delete {
-      top: 0;
-      left: -.3em;
-      line-height: 1.3em;
-
-      &::after {
-        content: '×';
-      }
-    }
-    .wrap-lambda {
-      top: 0;
-      left: 1em;
-      line-height: 1em;
-
-      &::after {
-        content: 'λx.';
-        font-size: .6em;
-      }
-    }
-    .wrap-application-argument {
-      top: 0;
-      left: 2.3em;
-      line-height: .9em;
-
-      &::after {
-        content: '(_ x)';
-        font-size: .55em;
-      }
-    }
-    .wrap-application-function {
-      top: 0;
-      left: 3.6em;
-      line-height: .9em;
-
-      &::after {
-        content: '(f _)';
-        font-size: .55em;
-      }
-    }
-  }
-
-  .hole {
-    .actions {
-      transform: translateY(10px) scale(0);
-    }
-    &.active > .actions {
-      transform: translateY(10px) scale(1);
-    }
-    .insert-variable {
-      right: 1em;
-      bottom: -1.8em;
-      line-height: 1.1em;
-
-      &::after {
-        content: 'x';
-      }
-    }
-
-    .insert-abstraction {
-      bottom: -2.2em;
-      left: -.25em;
-      line-height: 1.2em;
-
-      &::after {
+    .abstraction {
+      & > .parameter::before {
         content: 'λ';
       }
+
+      & > .parameter::after {
+        content: '.';
+      }
     }
 
-    .insert-application {
-      left: 1em;
-      bottom: -1.8em;
-      line-height: 1em;
+    /*
+    .application > .function > .abstraction,
+    .application > .argument > .application {
+        border-left: 1px solid black;
+        border-right: 1px solid black;
+    }
+    */
 
-      &::after {
-        content: '()';
-        font-size: .8em;
+    .application > .function > .application > .argument > .abstraction::before,
+    .application > .function > .abstraction::before,
+    .application > .argument > .application::before {
+      content: '(';
+    }
+
+    .application > .function > .application > .argument > .abstraction::after,
+    .application > .function > .abstraction::after,
+    .application > .argument > .application::after {
+      content: ')';
+    }
+
+    .hole {
+      background: orange;
+      content: ' ';
+      width: .7em;
+      height: .7em;
+      cursor: pointer;
+
+      &.hovered {
+        background-color: yellow;
+      }
+
+      &.active {
+        background-color: yellow !important;
+      }
+    }
+
+    .hole,
+    .actions-container {
+      display: inline-block;
+      position: relative;
+
+      .actions {
+        display: block;
+        transition-duration: .5s;
+
+        & > span {
+          position: absolute;
+          display: inline-block;
+          background: red;
+          border-radius: .6em;
+          height: 1.2em;
+          width: 1.2em;
+          text-align: center;
+          overflow: hidden;
+
+          cursor: pointer;
+          transition-duration: .2s;
+
+          &::after {
+            // Center overflowing text
+            text-align: center;
+            margin-left: -100%;
+            margin-right: -100%;
+          }
+
+          &:hover {
+            transform: scale(1.1);
+          }
+        }
+      }
+    }
+
+    span {
+      .actions {
+        transform: translateY(10px) translateX(-50px);
+        opacity: 0;
+        visibility: hidden;
+      }
+
+      &.hovered {
+        background: #90ee9060;
+      }
+
+      &.active {
+        background: lightgreen !important;
+
+        & > .actions,
+        & > .actions-container .actions {
+          transform: translateY(10px);
+          opacity: 1;
+          visibility: visible;
+        }
+      }
+
+      .delete {
+        top: 0;
+        left: -.3em;
+        line-height: 1.3em;
+
+        &::after {
+          content: '×';
+        }
+      }
+      .wrap-lambda {
+        top: 0;
+        left: 1em;
+        line-height: 1em;
+
+        &::after {
+          content: 'λx.';
+          font-size: .6em;
+        }
+      }
+      .wrap-application-argument {
+        top: 0;
+        left: 2.3em;
+        line-height: .9em;
+
+        &::after {
+          content: '(_ x)';
+          font-size: .55em;
+        }
+      }
+      .wrap-application-function {
+        top: 0;
+        left: 3.6em;
+        line-height: .9em;
+
+        &::after {
+          content: '(f _)';
+          font-size: .55em;
+        }
+      }
+    }
+
+    .hole {
+      .actions {
+        transform: translateY(10px) scale(0);
+      }
+      &.active > .actions {
+        transform: translateY(10px) scale(1);
+      }
+      .insert-variable {
+        right: 1em;
+        bottom: -1.8em;
+        line-height: 1.1em;
+
+        &::after {
+          content: 'x';
+        }
+      }
+
+      .insert-abstraction {
+        bottom: -2.2em;
+        left: -.25em;
+        line-height: 1.2em;
+
+        &::after {
+          content: 'λ';
+        }
+      }
+
+      .insert-application {
+        left: 1em;
+        bottom: -1.8em;
+        line-height: 1em;
+
+        &::after {
+          content: '()';
+          font-size: .8em;
+        }
       }
     }
   }

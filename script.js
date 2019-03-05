@@ -2,7 +2,10 @@ const { variable, application, lambda, hole } = require('./src/ast')
 const { toHtml } = require('./src/toHtml')
 
 let expression = application(application(lambda('x', lambda('y', hole())), variable('a')), variable('b'))
-let contenedor = document.getElementById("contenedor")
+let contenedor = document.getElementById("contenedor").querySelector(".lambda-calculus-expression > .expression")
+
+let undoQueue = []
+let redoQueue = []
 
 function on(event, element, handler) {
     element.addEventListener(event, event => {
@@ -17,6 +20,10 @@ function onClick(element, handler) {
 
 function updateExpression(newExpression) {
     if (expression !== newExpression) {
+        undoQueue.push(expression)
+        redoQueue = []
+        undoButton.disabled = false
+        redoButton.disabled = true
         expression = newExpression
         render()
     }
@@ -101,8 +108,26 @@ let render = () => {
     })
 }
 
-onClick(document.getElementById("evaluar"), () => {
+onClick(document.getElementById("contenedor").querySelector("button[name='evaluate']"), () => {
     updateExpression(expression.fullBetaReduce())
+})
+
+let undoButton = document.getElementById("contenedor").querySelector("button[name='undo']")
+onClick(undoButton, () => {
+    redoQueue.push(expression)
+    redoButton.disabled = false
+    expression = undoQueue.pop()
+    undoButton.disabled = !(undoQueue.length > 0)
+    render()
+})
+
+let redoButton = document.getElementById("contenedor").querySelector("button[name='redo']")
+onClick(redoButton, () => {
+    undoQueue.push(expression)
+    undoButton.disabled = false
+    expression = redoQueue.pop()
+    redoButton.disabled = !(redoQueue.length > 0)
+    render()
 })
 
 render()
