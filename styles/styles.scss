@@ -16,10 +16,6 @@
     padding: 0 .2em;
     background: #80808020;
     display: inline-block;
-
-    &.hovered {
-      background: lightgreen;
-    }
   }
 
   .parameter .variable {
@@ -29,10 +25,6 @@
 
   .abstraction, .application {
     cursor: pointer;
-
-    &.hovered {
-      background: lightgreen;
-    }
   }
 
   .application {
@@ -81,6 +73,10 @@
     &.hovered {
       background-color: yellow;
     }
+
+    &.active {
+      background-color: yellow !important;
+    }
   }
 
   .hole,
@@ -118,11 +114,19 @@
       visibility: hidden;
     }
 
-    &.active > .actions,
-    &.active > .actions-container .actions {
-      transform: translateY(10px);
-      opacity: 1;
-      visibility: visible;
+    &.hovered {
+      background: #90ee9060;
+    }
+
+    &.active {
+      background: lightgreen !important;
+
+      & > .actions,
+      & > .actions-container .actions {
+        transform: translateY(10px);
+        opacity: 1;
+        visibility: visible;
+      }
     }
 
     .delete {
