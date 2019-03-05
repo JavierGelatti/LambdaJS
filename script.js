@@ -1,9 +1,7 @@
-const { parseExpression } = require('./src/parser')
+const { variable, application, lambda, hole } = require('./src/ast')
 const { toHtml } = require('./src/toHtml')
 
-function parse(x) { return parseExpression(x) }
-
-let expression = parse("(λx.λy._) a b")
+let expression = application(application(lambda('x', lambda('y', hole())), variable('a')), variable('b'))
 let contenedor = document.getElementById("contenedor")
 
 function on(event, element, handler) {
@@ -45,50 +43,44 @@ let render = () => {
     contenedor.appendChild(toHtml(expression))
 
     setUpActionsOn('.hole', {
-        'insert-variable': hole => {
+        'insert-variable': selectedHole => {
             let variableName = prompt('Variable name?')
             if (variableName !== null && variableName.length !== 0) {
-                expression = expression.replace(hole.astNode, parse(variableName))
+                expression = expression.replace(selectedHole.astNode, variable(variableName))
                 render()
             }
         },
-        'insert-abstraction': hole => {
+        'insert-abstraction': selectedHole => {
             let variableName = prompt('Variable name?')
             if (variableName !== null && variableName.length !== 0) {
-                expression = expression.replace(hole.astNode, parse('λ' + variableName + '._'))
+                expression = expression.replace(selectedHole.astNode, lambda(variableName, hole()))
                 render()
             }
         },
-        'insert-application': hole => {
-            expression = expression.replace(hole.astNode, parse('_ _'))
+        'insert-application': selectedHole => {
+            expression = expression.replace(selectedHole.astNode, application(hole(), hole()))
             render()
         }
     })
 
     setUpActionsOn('.abstraction, .application, *:not(.parameter) > .variable', {
         'delete': node => {
-            expression = expression.replace(node.astNode, parse('_'))
+            expression = expression.replace(node.astNode, hole())
             render()
         },
         'wrap-lambda': node => {
             let variableName = prompt('Variable name?')
             if (variableName !== null && variableName.length !== 0) {
-                let lambda = parse('λ' + variableName + '._')
-                lambda.body = node.astNode
-                expression = expression.replace(node.astNode, lambda)
+                expression = expression.replace(node.astNode, lambda(variableName, node.astNode))
                 render()
             }
         },
         'wrap-application-argument': node => {
-            let application = parse('(_ _)')
-            application.argument = node.astNode
-            expression = expression.replace(node.astNode, application)
+            expression = expression.replace(node.astNode, application(hole(), node.astNode))
             render()
         },
         'wrap-application-function': node => {
-            let application = parse('(_ _)')
-            application.abstraction = node.astNode
-            expression = expression.replace(node.astNode, application)
+            expression = expression.replace(node.astNode, application(node.astNode, hole()))
             render()
         },
     })

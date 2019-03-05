@@ -270,4 +270,8 @@ function apply(abstraction, argument) {
     return application(abstraction, argument).betaReduced()
 }
 
-module.exports = { Variable, Abstraction, Application, Hole, variable, application, lambda, apply }
+function hole() {
+    return new Hole()
+}
+
+module.exports = { Variable, Abstraction, Application, Hole, variable, application, lambda, hole, apply }
