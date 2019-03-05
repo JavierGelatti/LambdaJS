@@ -38,6 +38,10 @@ class Expression {
     accept(visitor) {
         throw 'subclass responsibility'
     }
+
+    replace(toBeReplaced, replacement) {
+        throw 'subclass responsibility'
+    }
 }
 
 class Hole extends Expression{
@@ -94,6 +98,13 @@ class Hole extends Expression{
     accept(visitor) {
         return visitor.visitHole(this)
     }
+
+    replace(toBeReplaced, replacement) {
+        if (this.isEmpty())
+            return this
+        else
+            return this.value.replace(toBeReplaced, replacement)
+    }
 }
 
 class Variable extends Expression {
@@ -133,6 +144,14 @@ class Variable extends Expression {
 
     accept(visitor) {
         return visitor.visitVariable(this)
+    }
+
+    replace(toBeReplaced, replacement) {
+        if (this === toBeReplaced) {
+            return replacement
+        } else {
+            return this
+        }
     }
 }
 
@@ -192,6 +211,17 @@ class Abstraction extends Expression {
     accept(visitor) {
         return visitor.visitAbstraction(this)
     }
+
+    replace(toBeReplaced, replacement) {
+        if (this === toBeReplaced) {
+            return replacement
+        } else {
+            return new Abstraction(
+                this.boundVariable.replace(toBeReplaced, replacement),
+                this.body.replace(toBeReplaced, replacement)
+            )
+        }
+    }
 }
 
 function includes(list, value) {
@@ -236,6 +266,17 @@ class Application extends Expression {
 
     accept(visitor) {
         return visitor.visitApplication(this)
+    }
+
+    replace(toBeReplaced, replacement) {
+        if (this === toBeReplaced) {
+            return replacement
+        } else {
+            return new Application(
+                this.abstraction.replace(toBeReplaced, replacement),
+                this.argument.replace(toBeReplaced, replacement)
+            )
+        }
     }
 }
 

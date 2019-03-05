@@ -16,6 +16,14 @@ class VisitorHtml {
         bodyElement.appendChild(this.toHtml(abstraction.body))
 
         let abstractionElement = htmlToElement(`<span class="abstraction"></span>`)
+        abstractionElement.insertAdjacentHTML('beforeend', `<span class="actions-container">
+            <span class="actions hidden">
+                <span class="delete"></span>
+                <span class="wrap-lambda"></span>
+                <span class="wrap-application-argument"></span>
+                <span class="wrap-application-function"></span>
+            </span>
+        </span>`)
         abstractionElement.appendChild(parameterElement)
         abstractionElement.appendChild(bodyElement)
         abstractionElement.astNode = abstraction

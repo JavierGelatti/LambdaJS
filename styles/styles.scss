@@ -4,14 +4,6 @@
   padding-bottom: .5em;
   border-bottom: 1px solid darkgray;
 
-  .abstraction > .parameter::before {
-    content: 'λ';
-  }
-
-  .abstraction > .parameter::after {
-    content: '.';
-  }
-
   .application, .abstraction {
     border-radius: .3em;
     padding: .3em;
@@ -19,8 +11,26 @@
     display: inline-block;
   }
 
-  .application .function {
-    margin-right: .3em;
+  .application {
+    .function {
+      margin-right: .3em;
+    }
+  }
+
+  .abstraction {
+    cursor: pointer;
+
+    &.hovered {
+      background: lightgreen;
+    }
+
+    & > .parameter::before {
+      content: 'λ';
+    }
+
+    & > .parameter::after {
+      content: '.';
+    }
   }
 
   /*
@@ -48,15 +58,14 @@
     content: ' ';
     width: .7em;
     height: .7em;
-    display: inline-block;
-    position: relative;
     cursor: pointer;
+
+    &.hovered {
+      background-color: yellow;
+    }
   }
 
-  .hole:hover {
-    background-color: yellow;
-  }
-
+  // Override from 10Pines blog styles
   .hidden {
     display: none;
     visibility: visible;
@@ -64,64 +73,123 @@
     text-indent: 0;
   }
 
-  .insert-variable, .insert-abstraction, .insert-application {
-    position: absolute;
+  .hole,
+  .actions-container {
     display: inline-block;
-    background: red;
-    border-radius: .6em;
-    height: 1.2em;
-    width: 1.2em;
-    text-align: center;
+    position: relative;
 
-    cursor: pointer;
-    transition-duration: .2s;
-
-    &:hover {
-      transform: scale(1.1);
-    }
-    &::after {
+    .actions {
       display: block;
+      transition-duration: .5s;
+
+      & > span {
+        position: absolute;
+        display: inline-block;
+        background: red;
+        border-radius: .6em;
+        height: 1.2em;
+        width: 1.2em;
+        text-align: center;
+
+        cursor: pointer;
+        transition-duration: .2s;
+
+        &:hover {
+          transform: scale(1.1);
+        }
+      }
     }
   }
 
-  .insert-variable {
-    right: 1em;
-    bottom: -1.8em;
+  span {
+    .actions {
+      transform: translateY(10px);
+      opacity: 1;
+      visibility: visible;
+      &.hidden {
+        transform: translateY(10px) translateX(-50px);
+        opacity: 0;
+        visibility: hidden;
+      }
+    }
 
-    &::after {
-      content: 'x';
-      line-height: 1.1em;
+    .delete {
+      top: 0;
+      left: -.3em;
+      line-height: 1.3em;
+
+      &::after {
+        content: '×';
+      }
+    }
+    .wrap-lambda {
+      top: 0;
+      left: 1em;
+      line-height: 1em;
+
+      &::after {
+        content: 'λx.';
+        font-size: .6em;
+      }
+    }
+    .wrap-application-argument {
+      top: 0;
+      left: 2.3em;
+      line-height: .9em;
+
+      &::after {
+        content: '(_ x)';
+        font-size: .6em;
+      }
+    }
+    .wrap-application-function {
+      top: 0;
+      left: 3.6em;
+      line-height: .9em;
+
+      &::after {
+        content: '(f _)';
+        font-size: .6em;
+      }
     }
   }
 
-  .insert-abstraction {
-    bottom: -2.2em;
-    left: -.25em;
-
-    &::after {
-      content: 'λ';
-      line-height: 1.2em;
+  .hole {
+    .actions {
+      transform: translateY(10px) scale(1);
+      &.hidden {
+        transform: translateY(10px) scale(0);
+      }
     }
-  }
+    .insert-variable {
+      right: 1em;
+      bottom: -1.8em;
 
-  .insert-application {
-    left: 1em;
-    bottom: -1.8em;
-
-    &::after {
-      content: '()';
-      font-size: .8em;
-      line-height: 1.4em;
+      &::after {
+        content: 'x';
+        line-height: 1.1em;
+      }
     }
-  }
 
-  .hole .actions {
-    display: block;
-    transition-duration: .5s;
-    transform: translateY(10px) scale(1);
-  }
+    .insert-abstraction {
+      bottom: -2.2em;
+      left: -.25em;
 
-  .hole .actions.hidden {
-    transform: translateY(10px) scale(0);
+      &::after {
+        content: 'λ';
+        line-height: 1.2em;
+      }
+    }
+
+    .insert-application {
+      left: 1em;
+      bottom: -1.8em;
+
+      &::after {
+        content: '()';
+        font-size: .8em;
+        line-height: 1.4em;
+      }
+    }
   }
 }
