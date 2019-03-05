@@ -10,58 +10,61 @@ function hideAllActions() {
     contenedor.querySelectorAll('.actions').forEach(a => a.classList.add('hidden'))
 }
 
+function on(event, element, handler) {
+    element.addEventListener(event, event => {
+        handler()
+        event.stopPropagation()
+    })
+}
+
+function onClick(element, handler) {
+    return on('click', element, handler)
+}
+
 let render = () => {
     contenedor.innerHTML = ''
     contenedor.appendChild(toHtml(expression))
 
     contenedor.querySelectorAll('.hole').forEach(hole => {
-        hole.addEventListener('click', evt => {
+        onClick(hole, () => {
             hideAllActions()
             hole.querySelector('.actions').classList.toggle('hidden')
-            evt.stopPropagation()
         })
 
-        hole.querySelector('.insert-variable').addEventListener('click', evt => {
-            hideAllActions()
+        onClick(hole.querySelector('.insert-variable'), () => {
             let variableName = prompt('Variable name?')
             if (variableName !== null && variableName.length !== 0) {
                 expression = expression.replace(hole.astNode, parse(variableName))
                 render()
             }
-            evt.stopPropagation()
         })
-        hole.querySelector('.insert-abstraction').addEventListener('click', evt => {
-            hideAllActions()
+
+        onClick(hole.querySelector('.insert-abstraction'), () => {
             let variableName = prompt('Variable name?')
             if (variableName !== null && variableName.length !== 0) {
                 expression = expression.replace(hole.astNode, parse('λ' + variableName + '._'))
                 render()
             }
-            evt.stopPropagation()
         })
-        hole.querySelector('.insert-application').addEventListener('click', evt => {
-            hideAllActions()
+
+        onClick(hole.querySelector('.insert-application'), () => {
             expression = expression.replace(hole.astNode, parse('_ _'))
             render()
-            evt.stopPropagation()
         })
     })
 
     contenedor.querySelectorAll('.abstraction, .application, *:not(.parameter) > .variable').forEach(node => {
-        node.addEventListener('click', evt => {
+        onClick(node, () => {
             hideAllActions()
             node.querySelector('.actions').classList.toggle('hidden')
-            evt.stopPropagation()
         })
 
-        node.querySelector('.delete').addEventListener('click', evt => {
-            hideAllActions()
+        onClick(node.querySelector('.delete'), () => {
             expression = expression.replace(node.astNode, parse('_'))
             render()
-            evt.stopPropagation()
         })
-        node.querySelector('.wrap-lambda').addEventListener('click', evt => {
-            hideAllActions()
+
+        onClick(node.querySelector('.wrap-lambda'), () => {
             let variableName = prompt('Variable name?')
             if (variableName !== null && variableName.length !== 0) {
                 let lambda = parse('λ' + variableName + '._')
@@ -69,33 +72,33 @@ let render = () => {
                 expression = expression.replace(node.astNode, lambda)
                 render()
             }
-            evt.stopPropagation()
         })
-        node.querySelector('.wrap-application-argument').addEventListener('click', evt => {
-            hideAllActions()
+
+        onClick(node.querySelector('.wrap-application-argument'), () => {
             let application = parse('(_ _)')
             application.argument = node.astNode
             expression = expression.replace(node.astNode, application)
             render()
-            evt.stopPropagation()
         })
-        node.querySelector('.wrap-application-function').addEventListener('click', evt => {
-            hideAllActions()
+
+        onClick(node.querySelector('.wrap-application-function'), () => {
             let application = parse('(_ _)')
             application.abstraction = node.astNode
             expression = expression.replace(node.astNode, application)
             render()
-            evt.stopPropagation()
         })
     })
+
     contenedor.querySelectorAll('.abstraction, .application, .hole, *:not(.parameter) > .variable').
         forEach(abstraction => {
-            abstraction.addEventListener('mouseover', evt => {
-                contenedor.querySelectorAll('.abstraction, .application, .hole, *:not(.parameter) > .variable').forEach(a => a.classList.remove('hovered'))
+            on('mouseover', abstraction, () => {
+                contenedor.querySelectorAll('.abstraction, .application, .hole, *:not(.parameter) > .variable').
+                    forEach(a => a.classList.remove('hovered'))
                 abstraction.classList.add('hovered')
-                evt.stopPropagation()
             })
-            abstraction.addEventListener('mouseout', evt => abstraction.classList.remove('hovered'))
+            on('mouseout', abstraction, () => {
+                abstraction.classList.remove('hovered')
+            })
         })
 }
 
