@@ -40,45 +40,45 @@ let render = () => {
             evt.stopPropagation()
         }))
 
-    contenedor.querySelectorAll('.abstraction').
-        forEach(abstraction => abstraction.addEventListener('click', evt => {
+    contenedor.querySelectorAll('.abstraction, .application').
+        forEach(node => node.addEventListener('click', evt => {
             hideAllActions()
-            abstraction.querySelector('.actions').classList.toggle('hidden')
+            node.querySelector('.actions').classList.toggle('hidden')
 
-            abstraction.querySelector('.delete').addEventListener('click', evt => {
-                expression = expression.replace(abstraction.astNode, parse('_'))
+            node.querySelector('.delete').addEventListener('click', evt => {
+                expression = expression.replace(node.astNode, parse('_'))
                 render()
                 evt.stopPropagation()
             })
-            abstraction.querySelector('.wrap-lambda').addEventListener('click', evt => {
+            node.querySelector('.wrap-lambda').addEventListener('click', evt => {
                 let variableName = prompt('Variable name?')
                 let lambda = parse('λ' + variableName + '._')
-                lambda.body = abstraction.astNode
-                expression = expression.replace(abstraction.astNode, lambda)
+                lambda.body = node.astNode
+                expression = expression.replace(node.astNode, lambda)
                 render()
                 evt.stopPropagation()
             })
-            abstraction.querySelector('.wrap-application-argument').addEventListener('click', evt => {
+            node.querySelector('.wrap-application-argument').addEventListener('click', evt => {
                 let application = parse('(_ _)')
-                application.argument = abstraction.astNode
-                expression = expression.replace(abstraction.astNode, application)
+                application.argument = node.astNode
+                expression = expression.replace(node.astNode, application)
                 render()
                 evt.stopPropagation()
             })
-            abstraction.querySelector('.wrap-application-function').addEventListener('click', evt => {
+            node.querySelector('.wrap-application-function').addEventListener('click', evt => {
                 let application = parse('(_ _)')
-                application.abstraction = abstraction.astNode
-                expression = expression.replace(abstraction.astNode, application)
+                application.abstraction = node.astNode
+                expression = expression.replace(node.astNode, application)
                 render()
                 evt.stopPropagation()
             })
 
             evt.stopPropagation()
         }))
-    contenedor.querySelectorAll('.abstraction, .hole').
+    contenedor.querySelectorAll('.abstraction, .application, .hole').
         forEach(abstraction => {
             abstraction.addEventListener('mouseover', evt => {
-                contenedor.querySelectorAll('.abstraction, .hole').forEach(a => a.classList.remove('hovered'))
+                contenedor.querySelectorAll('.abstraction, .application, .hole').forEach(a => a.classList.remove('hovered'))
                 abstraction.classList.add('hovered')
                 evt.stopPropagation()
             })

@@ -11,6 +11,14 @@
     display: inline-block;
   }
 
+  .abstraction, .application {
+    cursor: pointer;
+
+    &.hovered {
+      background: lightgreen;
+    }
+  }
+
   .application {
     .function {
       margin-right: .3em;
@@ -18,12 +26,6 @@
   }
 
   .abstraction {
-    cursor: pointer;
-
-    &.hovered {
-      background: lightgreen;
-    }
-
     & > .parameter::before {
       content: 'λ';
     }

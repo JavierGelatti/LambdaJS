@@ -39,6 +39,14 @@ class VisitorHtml {
         argumentElement.appendChild(this.toHtml(application.argument))
 
         let applicationElement = htmlToElement(`<span class="application"></span>`)
+        applicationElement.insertAdjacentHTML('beforeend', `<span class="actions-container">
+            <span class="actions hidden">
+                <span class="delete"></span>
+                <span class="wrap-lambda"></span>
+                <span class="wrap-application-argument"></span>
+                <span class="wrap-application-function"></span>
+            </span>
+        </span>`)
         applicationElement.appendChild(functionElement)
         applicationElement.appendChild(argumentElement)
         applicationElement.astNode = application
