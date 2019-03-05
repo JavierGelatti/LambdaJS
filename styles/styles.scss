@@ -9,6 +9,7 @@
     padding: .3em;
     background: #80808020;
     display: inline-block;
+    user-select: none;
   }
 
   .variable {
@@ -16,6 +17,7 @@
     padding: 0 .2em;
     background: #80808020;
     display: inline-block;
+    user-select: none;
   }
 
   .parameter .variable {
