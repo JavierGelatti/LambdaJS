@@ -33,7 +33,13 @@ function setUpActionsOn(selector, actions) {
         })
 
         for (const action in actions) {
-            onClick(element.querySelector('.' + action), () => actions[action](element.astNode))
+            onClick(element.querySelector('.' + action), () => {
+                let newExpression = actions[action](element.astNode, expression)
+                if (expression !== newExpression) {
+                    expression = newExpression
+                    render()
+                }
+            })
         }
     })
 }
@@ -49,45 +55,44 @@ let render = () => {
     contenedor.appendChild(toHtml(expression))
 
     setUpActionsOn('.hole', {
-        'insert-variable': selectedHole => {
+        'insert-variable': (selectedHole, expression) => {
             let variableName = prompt('Variable name?')
             if (variableName !== null && variableName.length !== 0) {
-                expression = expression.replace(selectedHole, variable(variableName))
-                render()
+                return expression.replace(selectedHole, variable(variableName))
+            } else {
+                return expression
             }
         },
-        'insert-abstraction': selectedHole => {
+        'insert-abstraction': (selectedHole, expression) => {
             let variableName = prompt('Variable name?')
             if (variableName !== null && variableName.length !== 0) {
-                expression = expression.replace(selectedHole, lambda(variableName, hole()))
-                render()
+                return expression.replace(selectedHole, lambda(variableName, hole()))
+            } else {
+                return expression
             }
         },
-        'insert-application': selectedHole => {
-            expression = expression.replace(selectedHole, application(hole(), hole()))
-            render()
+        'insert-application': (selectedHole, expression) => {
+            return expression.replace(selectedHole, application(hole(), hole()))
         }
     })
 
     setUpActionsOn('.abstraction, .application, *:not(.parameter) > .variable', {
-        'delete': node => {
-            expression = expression.replace(node, hole())
-            render()
+        'delete': (node, expression) => {
+            return expression.replace(node, hole())
         },
-        'wrap-lambda': node => {
+        'wrap-lambda': (node, expression) => {
             let variableName = prompt('Variable name?')
             if (variableName !== null && variableName.length !== 0) {
-                expression = expression.replace(node, lambda(variableName, node))
-                render()
+                return expression.replace(node, lambda(variableName, node))
+            } else {
+                return expression
             }
         },
-        'wrap-application-argument': node => {
-            expression = expression.replace(node, application(hole(), node))
-            render()
+        'wrap-application-argument': (node, expression) => {
+            return expression.replace(node, application(hole(), node))
         },
-        'wrap-application-function': node => {
-            expression = expression.replace(node, application(node, hole()))
-            render()
+        'wrap-application-function': (node, expression) => {
+            return expression.replace(node, application(node, hole()))
         },
     })
 }
