@@ -112,10 +112,20 @@ class Editor {
         this.container = container
         this.expression = parseExpression(this.container.innerText.trim())
         this.container.innerHTML = `
+            <span class="actions">
+                <button name="undo" title="Undo" disabled>
+                    <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 485.215 485.215">
+                        <path d="M257.751,113.708c-74.419,0-140.281,35.892-181.773,91.155L0,128.868v242.606h242.606l-82.538-82.532c21.931-66.52,84.474-114.584,158.326-114.584c92.161,0,166.788,74.689,166.788,166.795C485.183,215.524,383.365,113.708,257.751,113.708z"/>
+                    </svg>
+                </button>
+                <button name="redo" title="Redo" disabled>
+                    <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 485.215 485.215">
+                        <path d="M227.443,113.724c74.421,0,140.283,35.892,181.773,91.155l75.999-75.994v242.606H242.592l82.523-82.532c-21.921-66.52-84.465-114.584-158.326-114.584C74.659,174.375,0,249.064,0,341.17C0,215.541,101.817,113.724,227.443,113.724z"/>
+                    </svg>
+                </button>
+            </span>
             <span class="expression"></span>
             <span class="actions">
-                <button name="undo" disabled>Deshacer</button>
-                <button name="redo" disabled>Rehacer</button>
                 <button name="evaluate">¡Evaluar!</button>
             </span>`
         this.undoButton = this.container.querySelector("button[name='undo']")

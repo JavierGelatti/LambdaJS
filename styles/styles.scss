@@ -4,13 +4,25 @@
   margin-bottom: 1em;
   color: black;
 
+  button {
+    svg {
+      width: 1em;
+    }
+    &[disabled] {
+      color: gray;
+      svg {
+        fill: gray;
+      }
+    }
+  }
+
   .actions {
     display: block;
   }
 
   .expression {
     font-size: 1.5em;
-    margin-bottom: .5em;
+    margin: .5em;
     display: inline-block;
 
     .application, .abstraction {
