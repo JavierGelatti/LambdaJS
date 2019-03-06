@@ -9,48 +9,48 @@ suite('Beta reduction', () => {
     })
 
     test('beta reduction of an abstraction is the abstraction', () => {
-        let abstraction = lambda("x", variable("x"))
+        let abstraction = lambda(variable("x"), variable("x"))
 
         assert.that(abstraction.betaReduced()).
             isEqualTo(abstraction)
     })
 
     test('application without replacing', () => {
-        let abstraction = lambda("x", variable("z"))
+        let abstraction = lambda(variable("x"), variable("z"))
         let argument = variable("y")
 
         assert.that(apply(abstraction, argument)).isEqualTo(variable("z"))
     })
 
     test('application replacing a variable', () => {
-        let abstraction = lambda("x", variable("x"))
+        let abstraction = lambda(variable("x"), variable("x"))
         let argument = variable("y")
 
         assert.that(apply(abstraction, argument)).isEqualTo(argument)
     })
 
     test('application replacing a free variable inside a lambda', () => {
-        let abstraction = lambda("x", lambda("y", variable("x")))
+        let abstraction = lambda(variable("x"), lambda(variable("y"), variable("x")))
         let argument = variable("z")
 
-        assert.that(apply(abstraction, argument)).isEqualTo(lambda("y", variable("z")))
+        assert.that(apply(abstraction, argument)).isEqualTo(lambda(variable("y"), variable("z")))
     })
 
     test('application not replacing a bound variable inside a lambda', () => {
-        let abstraction = lambda("x", lambda("x", variable("x")))
+        let abstraction = lambda(variable("x"), lambda(variable("x"), variable("x")))
         let argument = variable("z")
 
-        assert.that(apply(abstraction, argument)).isEqualTo(lambda("x", variable("x")))
+        assert.that(apply(abstraction, argument)).isEqualTo(lambda(variable("x"), variable("x")))
     })
 
     test('application not replacing variables on an application', () => {
-        let abstraction = lambda("x", application(variable("x"), variable("x")))
+        let abstraction = lambda(variable("x"), application(variable("x"), variable("x")))
 
         assert.isTrue(apply(abstraction, variable("y")).equals(application(variable("y"), variable("y"))))
     })
 
     test('nested application on nested lambda', () => {
-        let abstraction = lambda("x", lambda("y", variable("x")))
+        let abstraction = lambda(variable("x"), lambda(variable("y"), variable("x")))
 
         assert.isTrue(
             application(
@@ -77,7 +77,7 @@ suite('Beta reduction', () => {
     })
 
     test('full beta reduce', () => {
-        let abstraction = lambda("x", lambda("y", variable("y")))
+        let abstraction = lambda(variable("x"), lambda(variable("y"), variable("y")))
 
         assert.isTrue(
             application(
@@ -90,7 +90,7 @@ suite('Beta reduction', () => {
     })
 
     test('free vs bound while reducing', () => {
-        let abstraction = lambda("x", lambda("y", variable("x")))
+        let abstraction = lambda(variable("x"), lambda(variable("y"), variable("x")))
 
         assert.isTrue(
             application(
@@ -103,14 +103,14 @@ suite('Beta reduction', () => {
     })
 
     test('alpha conversion ok', () => {
-        let abstraction = lambda("x", variable("x"))
+        let abstraction = lambda(variable("x"), variable("x"))
 
         assert.isTrue(abstraction.alphaConvert("y").
-            equals(lambda("y", variable("y"))))
+            equals(lambda(variable("y"), variable("y"))))
     })
 
     test('alpha conversion error', () => {
-        let abstraction = lambda("x", variable("y"))
+        let abstraction = lambda(variable("x"), variable("y"))
 
         assert.that(() => abstraction.alphaConvert("y")).raises("The variable y is free in the body")
     })

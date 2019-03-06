@@ -84,6 +84,13 @@ class VisitorHtml {
         element.astNode = variable
         return element
     }
+
+    visitVariableToBeDefined(variable) {
+        let element = htmlToElement(`<span class="variable-tbd"></span>`)
+        element.appendChild(htmlToElement(`<span contenteditable="true"></span>`))
+        element.astNode = variable
+        return element
+    }
 }
 
 function htmlToElement(html) {

@@ -8,7 +8,7 @@ suite('Parser', () => {
     })
 
     test('lambdas', () => {
-        assert.that(parseExpression("λx.x")).isEqualTo(lambda("x", variable("x")))
+        assert.that(parseExpression("λx.x")).isEqualTo(lambda(variable("x"), variable("x")))
     })
 
     test('application', () => {
@@ -16,12 +16,12 @@ suite('Parser', () => {
     })
 
     test('application inside lambda', () => {
-        assert.that(parseExpression("λx.x x")).isEqualTo(lambda("x", application(variable("x"), variable("x"))))
+        assert.that(parseExpression("λx.x x")).isEqualTo(lambda(variable("x"), application(variable("x"), variable("x"))))
     })
 
     test('nested lambdas', () => {
         assert.that(parseExpression("λx.λy.x")).
-            isEqualTo(lambda("x", lambda("y", variable("x"))))
+            isEqualTo(lambda(variable("x"), lambda(variable("y"), variable("x"))))
     })
 
     test('nested application', () => {
@@ -31,12 +31,12 @@ suite('Parser', () => {
 
     test('parentheses in application function', () => {
         assert.that(parseExpression("(λx.x) y")).
-            isEqualTo(application(lambda("x", variable("x")), variable("y")))
+            isEqualTo(application(lambda(variable("x"), variable("x")), variable("y")))
     })
 
     test('parentheses in application argument', () => {
         assert.that(parseExpression("(λx.x) (y)")).
-            isEqualTo(application(lambda("x", variable("x")), variable("y")))
+            isEqualTo(application(lambda(variable("x"), variable("x")), variable("y")))
     })
 
     test('parentheses in variables', () => {
@@ -46,6 +46,6 @@ suite('Parser', () => {
 
     test('nested parentheses', () => {
         assert.that(parseExpression("((λx.((x))))")).
-            isEqualTo(lambda("x", variable("x")))
+            isEqualTo(lambda(variable("x"), variable("x")))
     })
 })

@@ -1,11 +1,11 @@
-const { variable, application, lambda, hole } = require('./ast')
+const { variable, variableTBD, application, lambda, hole } = require('./ast')
 const { toHtml } = require('./toHtml')
 const { parseExpression } = require('./parser')
 
 function on(event, element, handler) {
     if (element === null) return
     element.addEventListener(event, event => {
-        handler()
+        handler(event)
         event.stopPropagation()
     })
 }
@@ -84,20 +84,10 @@ class Editor {
 
         this.setUpActionsOn('.hole', {
             'insert-variable': (selectedHole, expression) => {
-                let variableName = prompt('Variable name?')
-                if (variableName) {
-                    return expression.replace(selectedHole, variable(variableName))
-                } else {
-                    return expression
-                }
+                return expression.replace(selectedHole, variableTBD())
             },
             'insert-abstraction': (selectedHole, expression) => {
-                let variableName = prompt('Variable name?')
-                if (variableName) {
-                    return expression.replace(selectedHole, lambda(variableName, hole()))
-                } else {
-                    return expression
-                }
+                return expression.replace(selectedHole, lambda(variableTBD(), hole()))
             },
             'insert-application': (selectedHole, expression) => {
                 return expression.replace(selectedHole, application(hole(), hole()))
@@ -109,12 +99,7 @@ class Editor {
                 return expression.replace(node, hole())
             },
             'wrap-lambda': (node, expression) => {
-                let variableName = prompt('Variable name?')
-                if (variableName) {
-                    return expression.replace(node, lambda(variableName, node))
-                } else {
-                    return expression
-                }
+                return expression.replace(node, lambda(variableTBD(), node))
             },
             'wrap-application-argument': (node, expression) => {
                 return expression.replace(node, application(hole(), node))
@@ -122,6 +107,17 @@ class Editor {
             'wrap-application-function': (node, expression) => {
                 return expression.replace(node, application(node, hole()))
             },
+        })
+
+        this.expressionContainer.querySelectorAll('.variable-tbd').forEach(element => {
+            on('click', element, () => {
+                // Do nothing
+            })
+            on('keypress', element, event => {
+                if (event.keyCode === 13) {
+                    this.updateExpression(this.expression.replace(element.astNode, variable(element.innerText)))
+                }
+            })
         })
     }
 

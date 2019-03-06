@@ -97,7 +97,7 @@ class Variable extends Expression {
     }
 
     replaceFreeVariable(oldVariable, newValue) {
-        if (this.name === oldVariable.name) {
+        if (this.equals(oldVariable)) {
             return newValue
         } else {
             return this
@@ -126,6 +126,20 @@ class Variable extends Expression {
         } else {
             return this
         }
+    }
+}
+
+class VariableTBD extends Variable {
+    constructor() {
+        super('???')
+    }
+
+    accept(visitor) {
+        return visitor.visitVariableToBeDefined(this)
+    }
+
+    equals(anotherVariable) {
+        return false
     }
 }
 
@@ -258,8 +272,12 @@ function variable(name) {
     return new Variable(name)
 }
 
-function lambda(variableName, body) {
-    return new Abstraction(variable(variableName), body)
+function variableTBD() {
+    return new VariableTBD()
+}
+
+function lambda(variable, body) {
+    return new Abstraction(variable, body)
 }
 
 function application(abstraction, argument) {
@@ -274,4 +292,4 @@ function hole() {
     return new Hole()
 }
 
-module.exports = { Variable, Abstraction, Application, Hole, variable, application, lambda, hole, apply }
+module.exports = { Variable, Abstraction, Application, Hole, variable, variableTBD, application, lambda, hole, apply }
