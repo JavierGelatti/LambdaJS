@@ -5,7 +5,7 @@
 <div id="contenedor">
 
 Sólo variables
-<div class="lambda only-variables">
+<div class="lambda only-variables without-undo without-evaluate">
 _
 </div>
 
