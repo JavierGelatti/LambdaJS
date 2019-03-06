@@ -150,7 +150,7 @@ class Editor {
 
 document.
     getElementById("contenedor").
-    querySelectorAll(".lambda-calculus-expression").
+    querySelectorAll(".lambda").
     forEach(container => {
         new Editor().bindTo(container)
     })

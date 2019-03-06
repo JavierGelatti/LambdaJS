@@ -4,11 +4,11 @@
 
 <div id="contenedor">
 
-<div class="lambda-calculus-expression">
+<div class="lambda">
 λx._
 </div>
 
-<div class="lambda-calculus-expression">
+<div class="lambda">
 (λx.λy._) a b
 </div>
 
