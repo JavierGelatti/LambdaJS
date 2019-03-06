@@ -74,10 +74,10 @@ class VisitorHtml {
         let element = htmlToElement(`<span class="variable"></span>`)
         element.insertAdjacentHTML('beforeend', `<span class="actions-container">
             <span class="actions">
-                <span class="delete"></span>
-                <span class="wrap-lambda"></span>
-                <span class="wrap-application-argument"></span>
-                <span class="wrap-application-function"></span>
+                ${this.options.delete ? '<span class="delete"></span>' : ''}
+                ${this.options.wrapLambda ? '<span class="wrap-lambda"></span>' : ''}
+                ${this.options.wrapApplicationArgument ? '<span class="wrap-application-argument"></span>' : ''}
+                ${this.options.wrapApplicationFunction ? '<span class="wrap-application-function"></span>' : ''}
             </span>
         </span>`)
         element.appendChild(document.createTextNode(variable.name))

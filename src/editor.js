@@ -68,6 +68,10 @@ class Editor {
             insertVariable: true,
             insertAbstraction: !this.container.classList.contains('only-variables'),
             insertApplication: !this.container.classList.contains('only-variables'),
+            delete: true,
+            wrapLambda: !this.container.classList.contains('only-variables'),
+            wrapApplicationArgument: !this.container.classList.contains('only-variables'),
+            wrapApplicationFunction: !this.container.classList.contains('only-variables'),
         }
         this.expressionContainer.appendChild(toHtml(this.expression, options))
 
