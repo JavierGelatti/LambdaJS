@@ -4,6 +4,36 @@
   margin-bottom: 1em;
   color: black;
 
+  .expression {
+    &::after {
+      content: ':)';
+      font-size: .7em;
+      line-height: 1.2em;
+      background: lightgreen;
+      width: 30px;
+      height: 30px;
+      display: block;
+      position: absolute;
+      right: -15px;
+      bottom: -15px;
+      border-radius: 15px;
+      transform: rotate(90deg);
+      color: darkgreen;
+      opacity: 0;
+      transition-duration: 1s;
+      transition-delay: .5s;
+      visibility: hidden;
+    }
+  }
+  &.success {
+    .expression {
+      &::after {
+        opacity: 1;
+        visibility: visible;
+      }
+    }
+  }
+
   button {
     svg {
       width: 1em;
@@ -25,6 +55,7 @@
     font-size: 1.5em;
     margin: .5em;
     display: inline-block;
+    position: relative;
 
     .application, .abstraction {
       border-radius: .3em;

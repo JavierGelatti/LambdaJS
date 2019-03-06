@@ -26,8 +26,15 @@ class Editor {
             this.redoQueue = []
             this.undoButton.disabled = false
             this.redoButton.disabled = true
-            this.expression = newExpression
+            this.setExpression(newExpression)
             this.render()
+        }
+    }
+
+    setExpression(expression) {
+        this.expression = expression
+        if (expression.toString() === 'pepe') {
+            this.container.classList.add('success')
         }
     }
 
@@ -156,7 +163,7 @@ class Editor {
 
         onClick(this.undoButton, () => {
             this.redoQueue.push(this.expression)
-            this.expression = this.undoQueue.pop()
+            this.setExpression(this.undoQueue.pop())
             this.undoButton.disabled = this.undoQueue.length === 0
             this.redoButton.disabled = this.redoQueue.length === 0
             this.render()
@@ -164,7 +171,7 @@ class Editor {
 
         onClick(this.redoButton, () => {
             this.undoQueue.push(this.expression)
-            this.expression = this.redoQueue.pop()
+            this.setExpression(this.redoQueue.pop())
             this.undoButton.disabled = this.undoQueue.length === 0
             this.redoButton.disabled = this.redoQueue.length === 0
             this.render()
