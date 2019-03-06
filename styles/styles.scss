@@ -9,6 +9,7 @@
       width: 1em;
     }
     &[disabled] {
+      //visibility: hidden;
       color: gray;
       svg {
         fill: gray;
@@ -205,13 +206,42 @@
     .hole {
       .actions {
         transform: translateY(10px) scale(0);
+
+        & > span:first-child:nth-last-child(1) {
+          bottom: -2.2em;
+          left: -.24em;
+        }
+
+        & > span:first-child:nth-last-child(2) {
+          left: -.85em;
+          bottom: -1.8em;
+
+          & ~ span:nth-child(2) {
+            bottom: -1.8em;
+            left: .4em;
+          }
+        }
+
+        & > span:first-child:nth-last-child(3) {
+          right: 1em;
+          bottom: -1.8em;
+
+          & ~ span:nth-child(2) {
+            bottom: -2.2em;
+            left: -.24em;
+          }
+
+          & ~ span:nth-child(3) {
+            left: 1em;
+            bottom: -1.8em;
+          }
+        }
       }
       &.active > .actions {
         transform: translateY(10px) scale(1);
       }
+
       .insert-variable {
-        right: 1em;
-        bottom: -1.8em;
         line-height: 1.1em;
 
         &::after {
@@ -220,8 +250,6 @@
       }
 
       .insert-abstraction {
-        bottom: -2.2em;
-        left: -.25em;
         line-height: 1.2em;
 
         &::after {
@@ -230,8 +258,6 @@
       }
 
       .insert-application {
-        left: 1em;
-        bottom: -1.8em;
         line-height: 1em;
 
         &::after {

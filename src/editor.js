@@ -3,6 +3,7 @@ const { toHtml } = require('./toHtml')
 const { parseExpression } = require('./parser')
 
 function on(event, element, handler) {
+    if (element === null) return
     element.addEventListener(event, event => {
         handler()
         event.stopPropagation()
@@ -63,7 +64,12 @@ class Editor {
 
     render() {
         this.expressionContainer.innerHTML = ''
-        this.expressionContainer.appendChild(toHtml(this.expression))
+        const options = {
+            insertVariable: true,
+            insertAbstraction: !this.container.classList.contains('only-variables'),
+            insertApplication: !this.container.classList.contains('only-variables'),
+        }
+        this.expressionContainer.appendChild(toHtml(this.expression, options))
 
         this.setUpActionsOn('.hole', {
             'insert-variable': (selectedHole, expression) => {

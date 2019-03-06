@@ -4,6 +4,10 @@ if (typeof document === 'undefined') {
 }
 
 class VisitorHtml {
+    constructor(options) {
+        this.options = options
+    }
+
     toHtml(expression) {
         return expression.accept(this)
     }
@@ -57,9 +61,9 @@ class VisitorHtml {
     visitHole(hole) {
         let element = htmlToElement(`<span class="hole">
             <span class="actions">
-                <span class="insert-variable"></span>
-                <span class="insert-abstraction"></span>
-                <span class="insert-application"></span>
+                ${this.options.insertVariable ? '<span class="insert-variable"></span>' : ''}
+                ${this.options.insertAbstraction ? '<span class="insert-abstraction"></span>' : ''}
+                ${this.options.insertApplication ? '<span class="insert-application"></span>' : ''}
             </span>
         </span>`)
         element.astNode = hole
@@ -88,8 +92,8 @@ function htmlToElement(html) {
     return template.content.firstChild;
 }
 
-function toHtml(expression) {
-    return new VisitorHtml().toHtml(expression)
+function toHtml(expression, options = {}) {
+    return new VisitorHtml(options).toHtml(expression)
 }
 
 module.exports = { toHtml }

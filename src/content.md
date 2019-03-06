@@ -4,8 +4,9 @@
 
 <div id="contenedor">
 
-<div class="lambda">
-λx._
+Sólo variables
+<div class="lambda only-variables">
+_
 </div>
 
 <div class="lambda">
