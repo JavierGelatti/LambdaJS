@@ -1,5 +1,6 @@
 const { variable, application, lambda, hole } = require('./src/ast')
 const { toHtml } = require('./src/toHtml')
+const { parseExpression } = require('./src/parser')
 
 function on(event, element, handler) {
     element.addEventListener(event, event => {
@@ -13,14 +14,9 @@ function onClick(element, handler) {
 }
 
 class Editor {
-    constructor(container, initialExpression = hole()) {
-        this.expression = initialExpression
+    constructor() {
         this.undoQueue = []
         this.redoQueue = []
-        this.undoButton = container.querySelector("button[name='undo']")
-        this.redoButton = container.querySelector("button[name='redo']")
-        this.container = container
-        this.expressionContainer = container.querySelector(".expression")
     }
 
     updateExpression(newExpression) {
@@ -112,7 +108,20 @@ class Editor {
         })
     }
 
-    init() {
+    bindTo(container) {
+        this.container = container
+        this.expression = parseExpression(this.container.innerText.trim())
+        this.container.innerHTML = `
+            <span class="expression"></span>
+            <span class="actions">
+                <button name="undo" disabled>Deshacer</button>
+                <button name="redo" disabled>Rehacer</button>
+                <button name="evaluate">¡Evaluar!</button>
+            </span>`
+        this.undoButton = this.container.querySelector("button[name='undo']")
+        this.redoButton = this.container.querySelector("button[name='redo']")
+        this.expressionContainer = this.container.querySelector(".expression")
+
         document.body.addEventListener('click', () => this.deactivateAllNodes())
 
         onClick(this.container.querySelector("button[name='evaluate']"), () => {
@@ -143,7 +152,6 @@ document.
     getElementById("contenedor").
     querySelectorAll(".lambda-calculus-expression").
     forEach(container => {
-        let expression = application(application(lambda('x', lambda('y', hole())), variable('a')), variable('b'))
-        new Editor(container, expression).init()
+        new Editor().bindTo(container)
     })
 
