@@ -18,21 +18,24 @@ class Editor {
     constructor() {
         this.undoQueue = []
         this.redoQueue = []
+        this.selectedNode = null
     }
 
-    updateExpression(newExpression) {
+    updateExpression(newExpression, selectedNode = null) {
         if (this.expression !== newExpression) {
             this.undoQueue.push(this.expression)
             this.redoQueue = []
             this.undoButton.disabled = false
             this.redoButton.disabled = true
             this.setExpression(newExpression)
+            this.selectedNode = selectedNode
             this.render()
         }
     }
 
     setExpression(expression) {
         this.expression = expression
+        this.selectedNode = null
         if (expression.toString() === 'pepe') {
             this.container.classList.add('success')
         }
@@ -57,8 +60,8 @@ class Editor {
 
             for (const action in actions) {
                 onClick(element.querySelector('.' + action), () => {
-                    let newExpression = actions[action](element.astNode, this.expression)
-                    this.updateExpression(newExpression)
+                    let result = actions[action](element.astNode, this.expression)
+                    this.updateExpression(result['expression'], result['selection'])
                 })
             }
         })
@@ -82,30 +85,66 @@ class Editor {
         }
         this.expressionContainer.appendChild(toHtml(this.expression, options))
 
+        const selectedElement = Array.from(this.expressionContainer.querySelectorAll("*")).
+            find(element => element.astNode === this.selectedNode)
+
+        if (selectedElement && selectedElement.firstChild && selectedElement.firstChild.focus) {
+            selectedElement.firstChild.focus()
+            document.execCommand('selectAll',false,null)
+        }
+
         this.setUpActionsOn('.hole', {
             'insert-variable': (selectedHole, expression) => {
-                return expression.replace(selectedHole, variableTBD())
+                const newVariable = variableTBD()
+                return {
+                    expression: expression.replace(selectedHole, newVariable),
+                    selection: newVariable,
+                }
             },
             'insert-abstraction': (selectedHole, expression) => {
-                return expression.replace(selectedHole, lambda(variableTBD(), hole()))
+                const newVariable = variableTBD()
+                return {
+                    expression: expression.replace(selectedHole, lambda(newVariable, hole())),
+                    selection: newVariable,
+                }
             },
             'insert-application': (selectedHole, expression) => {
-                return expression.replace(selectedHole, application(hole(), hole()))
+                const abstractionHole = hole()
+                return {
+                    expression: expression.replace(selectedHole, application(abstractionHole, hole())),
+                    selection: abstractionHole,
+                }
             }
         })
 
         this.setUpActionsOn('.abstraction, .application, *:not(.parameter) > .variable', {
             'delete': (node, expression) => {
-                return expression.replace(node, hole())
+                const newHole = hole()
+                return {
+                    expression: expression.replace(node, newHole),
+                    selection: newHole,
+                }
             },
             'wrap-lambda': (node, expression) => {
-                return expression.replace(node, lambda(variableTBD(), node))
+                const newVariable = variableTBD()
+                return {
+                    expression: expression.replace(node, lambda(newVariable, node)),
+                    selection: newVariable,
+                }
             },
             'wrap-application-argument': (node, expression) => {
-                return expression.replace(node, application(hole(), node))
+                const newHole = hole()
+                return {
+                    expression: expression.replace(node, application(newHole, node)),
+                    selection: newHole,
+                }
             },
             'wrap-application-function': (node, expression) => {
-                return expression.replace(node, application(node, hole()))
+                const newHole = hole()
+                return {
+                    expression: expression.replace(node, application(node, newHole)),
+                    selection: newHole,
+                }
             },
         })
 
@@ -115,7 +154,7 @@ class Editor {
             })
             on('keypress', element, event => {
                 if (event.keyCode === 13) {
-                    this.updateExpression(this.expression.replace(element.astNode, variable(element.innerText)))
+                    this.updateExpression(this.expression.replace(element.astNode, variable(element.innerText.trim())))
                 }
             })
         })
