@@ -90,7 +90,6 @@ class Editor {
 
         if (selectedElement && selectedElement.firstChild && selectedElement.firstChild.focus) {
             selectedElement.firstChild.focus()
-            document.execCommand('selectAll',false,null)
         }
 
         this.setUpActionsOn('.hole', {
