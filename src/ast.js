@@ -139,7 +139,7 @@ class VariableTBD extends Variable {
     }
 
     equals(anotherVariable) {
-        return false
+        return this === anotherVariable
     }
 }
 
