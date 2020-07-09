@@ -1,6 +1,7 @@
-const { variable, variableTBD, application, lambda, hole } = require('./ast')
 const { toHtml } = require('./toHtml')
-const { parseExpression } = require('./parser')
+const { parse, ast: { identifier, application, lambda, hole } } = require('f-calculus')
+
+const parseExpression = parse
 
 function on(event, element, handler) {
     if (element === null) return
@@ -94,14 +95,16 @@ class Editor {
 
         this.setUpActionsOn('.hole', {
             'insert-variable': (selectedHole, expression) => {
-                const newVariable = variableTBD()
+                const newVariable = identifier("")
+                newVariable.beingEdited = true
                 return {
                     expression: expression.replace(selectedHole, newVariable),
                     selection: newVariable,
                 }
             },
             'insert-abstraction': (selectedHole, expression) => {
-                const newVariable = variableTBD()
+                const newVariable = identifier("")
+                newVariable.beingEdited = true
                 return {
                     expression: expression.replace(selectedHole, lambda(newVariable, hole())),
                     selection: newVariable,
@@ -125,7 +128,7 @@ class Editor {
                 }
             },
             'wrap-lambda': (node, expression) => {
-                const newVariable = variableTBD()
+                const newVariable = hole()
                 return {
                     expression: expression.replace(node, lambda(newVariable, node)),
                     selection: newVariable,
@@ -153,7 +156,7 @@ class Editor {
             })
             on('keypress', element, event => {
                 if (event.keyCode === 13) {
-                    this.updateExpression(this.expression.replace(element.astNode, variable(element.innerText.trim())))
+                    this.updateExpression(this.expression.replace(element.astNode, identifier(element.innerText.trim())))
                 }
             })
         })

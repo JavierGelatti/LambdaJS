@@ -8,20 +8,21 @@
   },
   "dependencies": {
     "arcsecond": "^1.3.0",
+    "f-calculus": "github:javiergelatti/f-calculus#f211b88164c8d17d522b5c47933f56ffb08a29d1",
     "html-import-partials": "^1.0.1"
   },
   "devDependencies": {
     "@babel/cli": "^7.2.3",
     "@babel/core": "^7.3.4",
     "@babel/preset-env": "^7.3.4",
-    "@pmoo/testy": "^3.1.1",
     "autoprefixer": "^9.4.9",
     "babelify": "^10.0.0",
     "browserify": "^16.2.3",
+    "jest": "^26.1.0",
     "jsdom": "^13.2.0",
-    "marked": "^0.6.1",
-    "node-sass": "^4.11.0",
-    "postcss-cli": "^6.1.2",
+    "marked": "^1.1.0",
+    "node-sass": "^4.14.1",
+    "postcss-cli": "^7.1.1",
     "uglify-js": "^3.4.9"
   },
   "browserslist": "> 1%",
@@ -38,7 +39,7 @@
     "dev_build": "npm run build_dev_js && npm run build_dev_css && npm run build_html",
     "uglify": "uglifyjs --compress --mangle --output bundle.js -- bundle.js",
     "build": "npm run build_dev_js && npm run uglify && npm run build_css && npm run build_html",
-    "test": "node tests.js"
+    "test": "jest"
   },
   "author": "Facundo Javier Gelatti",
   "license": "ISC"

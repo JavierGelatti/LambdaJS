@@ -1,3 +1,5 @@
+const { ast: { hole } } = require('f-calculus')
+
 if (typeof document === 'undefined') {
     const { JSDOM } = require('js' + 'dom') // Don't use browserify here
     document = new JSDOM(`<!DOCTYPE html>`).window.document
@@ -12,7 +14,7 @@ class VisitorHtml {
         return expression.accept(this)
     }
 
-    visitAbstraction(abstraction) {
+    visitLambda(abstraction) {
         let parameterElement = htmlToElement(`<span class="parameter"></span>`)
         parameterElement.appendChild(this.toHtml(abstraction.boundVariable))
 
@@ -71,6 +73,10 @@ class VisitorHtml {
     }
 
     visitVariable(variable) {
+        return variable.beingEdited ? this.visitVariableToBeDefined(variable) : this.visitDefinedVariable(variable)
+    }
+
+    visitDefinedVariable(variable) {
         let element = htmlToElement(`<span class="variable"></span>`)
         element.insertAdjacentHTML('beforeend', `<span class="actions-container">
             <span class="actions">
