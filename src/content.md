@@ -1,5 +1,6 @@
 <link rel="stylesheet" href="styles.css">
-<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML' async></script>
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 
 # Cálculo Lambda
 
@@ -21,7 +22,7 @@ _
 
     Como vimos, las variables son expresiones, por lo tanto \\(\lambda x.x\\) es una expresión.
     Otra expresión puede ser \\(\lambda x.\lambda y.x\\), ya que las abstracciones también son expresiones.
-    
+
     Semánticamente, las abstracciones representan funciones sin nombre:
     \\[\lambda x.x \sim f(x) = x\\]
 
@@ -31,7 +32,7 @@ _
     - \\(a \\; b\\)
     - \\((\lambda x.x) \\; y\\)
     - \\((\lambda x. x \\; x) \\; (\lambda y.y)\\)
-    
+
     Semánticamente, una aplicación representa pasar un argumento a una función:
     \\[(\lambda x.x) y \sim f(y), \text{ donde: } f(x) = x\\]
 

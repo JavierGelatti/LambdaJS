@@ -139,7 +139,7 @@
       height: .7em;
       cursor: pointer;
 
-      &:hover {
+      &.hovered {
         background-color: yellow;
       }
 
@@ -191,7 +191,7 @@
         visibility: hidden;
       }
 
-      &:hover {
+      &.hovered {
         background: #90ee9060;
       }
 
@@ -215,7 +215,7 @@
           content: '×';
         }
       }
-      .wrap-lambda {
+      .wrapLambda {
         top: 0;
         left: 1em;
         line-height: 1em;
@@ -225,7 +225,7 @@
           font-size: .6em;
         }
       }
-      .wrap-application-argument {
+      .wrapApplicationArgument {
         top: 0;
         left: 2.3em;
         line-height: .9em;
@@ -235,7 +235,7 @@
           font-size: .55em;
         }
       }
-      .wrap-application-function {
+      .wrapApplicationFunction {
         top: 0;
         left: 3.6em;
         line-height: .9em;
@@ -285,7 +285,7 @@
         transform: translateY(10px) scale(1);
       }
 
-      .insert-variable {
+      .insertVariable {
         line-height: 1.1em;
 
         &::after {
@@ -293,7 +293,7 @@
         }
       }
 
-      .insert-abstraction {
+      .insertAbstraction {
         line-height: 1.2em;
 
         &::after {
@@ -301,7 +301,7 @@
         }
       }
 
-      .insert-application {
+      .insertApplication {
         line-height: 1em;
 
         &::after {

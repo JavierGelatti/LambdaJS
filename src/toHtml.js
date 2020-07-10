@@ -12,7 +12,7 @@ class VisitorHtml {
     }
 
     toHtml(expression) {
-        new VisitorToAddActions(this.options).addActionsTo(expression)
+        this.actions = new VisitorToAddActions(this.options).allActionsFor(expression)
         return expression.accept(this)
     }
 
@@ -24,7 +24,7 @@ class VisitorHtml {
         )
 
         let bodyElement = htmlToElement(`<span class="body"></span>`)
-        bodyElement.appendChild(this.toHtml(abstraction.body))
+        bodyElement.appendChild(abstraction.body.accept(this))
 
         let abstractionElement = htmlToElement(`<span class="abstraction"></span>`)
         abstractionElement.insertAdjacentHTML('beforeend', `<span class="actions-container">
@@ -42,10 +42,10 @@ class VisitorHtml {
 
     visitApplication(application) {
         let functionElement = htmlToElement(`<span class="function"></span>`)
-        functionElement.appendChild(this.toHtml(application.abstraction))
+        functionElement.appendChild(application.abstraction.accept(this))
 
         let argumentElement = htmlToElement(`<span class="argument"></span>`)
-        argumentElement.appendChild(this.toHtml(application.argument))
+        argumentElement.appendChild(application.argument.accept(this))
 
         let applicationElement = htmlToElement(`<span class="application"></span>`)
         applicationElement.insertAdjacentHTML('beforeend', `<span class="actions-container">
@@ -74,11 +74,12 @@ class VisitorHtml {
 
     addActionsTo(element) {
         const actionsContainer = element.querySelector('.actions')
-        for (const action in element.astNode.actions) {
+        const actionsForElement = this.actions.get(element.astNode)
+        for (const action in actionsForElement) {
             const actionButton = document.createElement('span')
             actionButton.classList.add(action)
             onClick(actionButton, () => {
-                const result = element.astNode.actions[action](element.astNode, this.editor.expression)
+                const result = actionsForElement[action](element.astNode, this.editor.expression)
                 this.editor.updateExpression(result['expression'], result['selection'])
             })
             actionsContainer.appendChild(actionButton)
@@ -133,7 +134,17 @@ function htmlToElement(html) {
     return template.content.firstChild;
 }
 
-function toHtml(expression, editor, options = {}) {
+const defaultOptions = {
+    insertVariable: true,
+    insertAbstraction: true,
+    insertApplication: true,
+    delete: true,
+    wrapLambda: true,
+    wrapApplicationArgument: true,
+    wrapApplicationFunction: true
+}
+
+function toHtml(expression, editor, options = defaultOptions) {
     return new VisitorHtml(options, editor).toHtml(expression)
 }
 

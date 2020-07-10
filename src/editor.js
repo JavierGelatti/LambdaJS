@@ -44,6 +44,12 @@ class Editor {
 
     setUpActionsOn(selector) {
         this.expressionContainer.querySelectorAll(selector).forEach(element => {
+            on('mouseover', element, () => {
+                element.classList.add('hovered')
+            })
+            on('mouseout', element, () => {
+                element.classList.remove('hovered')
+            })
             on('click', element, () => {
                 if (element.classList.contains('active')) {
                     this.deactivateAllNodes()

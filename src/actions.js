@@ -3,97 +3,105 @@ const { ast: { identifier, application, lambda, hole } } = require('f-calculus')
 class VisitorToAddActions {
     constructor(options) {
         this.options = options
-    }
-
-    commonActions() {
-        return {
-            'delete': (node, expression) => {
+        this.holeActions = this.activeActionsFrom({
+            insertVariable(selectedHole, expression) {
+                const newVariable = identifier("")
+                newVariable.beingEdited = true
+                return {
+                    expression: expression.replace(selectedHole, newVariable),
+                    selection: newVariable,
+                }
+            },
+            insertAbstraction(selectedHole, expression) {
+                const newVariable = identifier("")
+                newVariable.beingEdited = true
+                return {
+                    expression: expression.replace(selectedHole, lambda(newVariable, hole())),
+                    selection: newVariable,
+                }
+            },
+            insertApplication(selectedHole, expression) {
+                const abstractionHole = hole()
+                return {
+                    expression: expression.replace(selectedHole, application(abstractionHole, hole())),
+                    selection: abstractionHole,
+                }
+            }
+        })
+        this.commonActions = this.activeActionsFrom({
+            delete(node, expression) {
                 const newHole = hole()
                 return {
                     expression: expression.replace(node, newHole),
                     selection: newHole,
                 }
             },
-            'wrap-lambda': (node, expression) => {
+            wrapLambda(node, expression) {
                 const newVariable = hole()
                 return {
                     expression: expression.replace(node, lambda(newVariable, node)),
                     selection: newVariable,
                 }
             },
-            'wrap-application-argument': (node, expression) => {
+            wrapApplicationArgument(node, expression) {
                 const newHole = hole()
                 return {
                     expression: expression.replace(node, application(newHole, node)),
                     selection: newHole,
                 }
             },
-            'wrap-application-function': (node, expression) => {
+            wrapApplicationFunction(node, expression) {
                 const newHole = hole()
                 return {
                     expression: expression.replace(node, application(node, newHole)),
                     selection: newHole,
                 }
             },
-        }
+        })
     }
 
-    addActionsTo(expression) {
-        return expression.accept(this)
+    activeActionsFrom(someActions) {
+        return Object.fromEntries(
+            Object.entries(someActions)
+                .filter(([key, _]) => this.options[key])
+        )
+    }
+
+    allActionsFor(expression) {
+        this.actions = new Map()
+
+        expression.accept(this)
+
+        return this.actions
+    }
+
+    registerActionsFor(expression, actions) {
+        this.actions.set(expression, actions)
     }
 
     visitLambda(abstraction) {
-        new VisitorToAddActionsForParameters(this.options).addActionsTo(abstraction.boundVariable)
-        this.addActionsTo(abstraction.body)
+        this.actions = new Map([
+            ...this.actions,
+            ...new VisitorToAddActionsForParameters(this.options).allActionsFor(abstraction.boundVariable)
+        ])
+        abstraction.body.accept(this)
 
-        abstraction.actions = this.commonActions()
+        this.registerActionsFor(abstraction, this.commonActions)
 
         return abstraction
     }
 
     visitApplication(application) {
-        this.addActionsTo(application.abstraction)
-        this.addActionsTo(application.argument)
+        application.abstraction.accept(this)
+        application.argument.accept(this)
 
-        application.actions = this.commonActions()
+        this.registerActionsFor(application, this.commonActions)
 
         return application
     }
 
     visitHole(holeElement) {
-        const actions = {
-            ...this.options.insertVariable && {
-                'insert-variable': (selectedHole, expression) => {
-                    const newVariable = identifier("")
-                    newVariable.beingEdited = true
-                    return {
-                        expression: expression.replace(selectedHole, newVariable),
-                        selection: newVariable,
-                    }
-                }
-            },
-            ...this.options.insertAbstraction && {
-                'insert-abstraction': (selectedHole, expression) => {
-                    const newVariable = identifier("")
-                    newVariable.beingEdited = true
-                    return {
-                        expression: expression.replace(selectedHole, lambda(newVariable, hole())),
-                        selection: newVariable,
-                    }
-                }
-            },
-            ...this.options.insertApplication && {
-                'insert-application': (selectedHole, expression) => {
-                    const abstractionHole = hole()
-                    return {
-                        expression: expression.replace(selectedHole, application(abstractionHole, hole())),
-                        selection: abstractionHole,
-                    }
-                }
-            }
-        }
-
-        holeElement.actions = actions
+        this.registerActionsFor(holeElement, this.holeActions)
 
         return holeElement
     }
@@ -103,7 +111,7 @@ class VisitorToAddActions {
     }
 
     visitDefinedVariable(variable) {
-        variable.actions = this.commonActions()
+        this.registerActionsFor(variable, this.commonActions)
 
         return variable
     }
@@ -114,8 +122,9 @@ class VisitorToAddActions {
 }
 
 class VisitorToAddActionsForParameters extends VisitorToAddActions {
-    commonActions() {
-        return {}
+    constructor(options) {
+        super(options)
+        this.commonActions = {}
     }
 }
 
