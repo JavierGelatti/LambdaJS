@@ -1,6 +1,6 @@
 import { toHtml } from "./toHtml";
 import { parse } from "f-calculus";
-import { VisitorToAddActions } from "./actions";
+import { ActionCollector } from "./actions";
 
 function on(event, element, handler) {
     if (element === null) return
@@ -38,7 +38,7 @@ export class Editor {
 
     setExpression(expression) {
         this.expression = expression
-        this.actions = new VisitorToAddActions(this.options).allActionsFor(this.expression)
+        this.actions = new ActionCollector(this.options).allActionsFor(this.expression)
         this.selectedNode = null
     }
 

@@ -5,6 +5,37 @@
     color: black;
     font-family: serif;
 
+    .expression {
+        &::after {
+            content: ':)';
+            font-size: .7em;
+            line-height: 1.2em;
+            background: lightgreen;
+            width: 30px;
+            height: 30px;
+            display: block;
+            position: absolute;
+            right: -15px;
+            bottom: -15px;
+            border-radius: 15px;
+            transform: rotate(90deg);
+            color: darkgreen;
+            opacity: 0;
+            transition-duration: 1s;
+            transition-delay: .5s;
+            visibility: hidden;
+        }
+    }
+
+    &.success {
+        .expression {
+            &::after {
+                opacity: 1;
+                visibility: visible;
+            }
+        }
+    }
+
     button {
         svg {
             width: 1em;
@@ -109,22 +140,32 @@
         }
 
         .hole {
-            background: orange;
-            content: ' ';
-            width: .7em;
-            height: .7em;
-            cursor: pointer;
+            &.active {
+                background: transparent;
 
-            &.hovered {
-                background-color: yellow;
+                &::after {
+                    background: yellow;
+                }
             }
 
-            &.active {
-                background-color: yellow !important;
+            &.hovered {
+                background: transparent;
+
+                &::after {
+                    background-color: yellow;
+                }
+            }
+
+            &::after {
+                display: inline-block;
+                background: orange;
+                content: ' ';
+                width: .7em;
+                height: .7em;
+                cursor: pointer;
             }
         }
 
-        .hole,
         .actions-container {
             display: inline-block;
             position: relative;
@@ -134,7 +175,7 @@
                 transition-duration: .5s;
 
                 & > span {
-                    position: absolute;
+                    margin-right: .1em;
                     display: inline-block;
                     background: red;
                     border-radius: .6em;
@@ -165,6 +206,8 @@
                 transform: translateY(10px) translateX(-50px);
                 opacity: 0;
                 visibility: hidden;
+                position: absolute;
+                display: flex;
             }
 
             &.hovered {
@@ -172,7 +215,7 @@
             }
 
             &.active {
-                background: lightgreen !important;
+                background: lightgreen;
 
                 & > .actions,
                 & > .actions-container .actions {
@@ -182,9 +225,13 @@
                 }
             }
 
+            .rename {
+                &::after {
+                    content: 'rename';
+                }
+            }
+
             .delete {
-                top: 0;
-                left: -.37em;
                 line-height: 1.3em;
 
                 &::after {
@@ -193,8 +240,6 @@
             }
 
             .wrapLambda {
-                top: 0;
-                left: 1em;
                 line-height: 1em;
 
                 &::after {
@@ -204,8 +249,6 @@
             }
 
             .wrapApplicationArgument {
-                top: 0;
-                left: 2.3em;
                 line-height: .9em;
 
                 &::after {
@@ -215,8 +258,6 @@
             }
 
             .wrapApplicationFunction {
-                top: 0;
-                left: 3.6em;
                 line-height: .9em;
 
                 &::after {
@@ -226,68 +267,28 @@
             }
         }
 
-        .hole {
-            .actions {
-                transform: translateY(10px) scale(0);
+        .insertVariable {
+            line-height: 1.1em;
 
-                & > span:first-child:nth-last-child(1) {
-                    bottom: -2.2em;
-                    left: -.24em;
-                }
-
-                & > span:first-child:nth-last-child(2) {
-                    left: -.85em;
-                    bottom: -1.8em;
-
-                    & ~ span:nth-child(2) {
-                        bottom: -1.8em;
-                        left: .4em;
-                    }
-                }
-
-                & > span:first-child:nth-last-child(3) {
-                    right: 1em;
-                    bottom: -1.8em;
-
-                    & ~ span:nth-child(2) {
-                        bottom: -2.2em;
-                        left: -.24em;
-                    }
-
-                    & ~ span:nth-child(3) {
-                        left: 1em;
-                        bottom: -1.8em;
-                    }
-                }
+            &::after {
+                content: 'x';
             }
+        }
 
-            &.active > .actions {
-                transform: translateY(10px) scale(1);
+        .insertAbstraction {
+            line-height: 1.2em;
+
+            &::after {
+                content: 'λ';
             }
+        }
 
-            .insertVariable {
-                line-height: 1.1em;
+        .insertApplication {
+            line-height: 1em;
 
-                &::after {
-                    content: 'x';
-                }
-            }
-
-            .insertAbstraction {
-                line-height: 1.2em;
-
-                &::after {
-                    content: 'λ';
-                }
-            }
-
-            .insertApplication {
-                line-height: 1em;
-
-                &::after {
-                    content: '()';
-                    font-size: .8em;
-                }
+            &::after {
+                content: '()';
+                font-size: .8em;
             }
         }
     }

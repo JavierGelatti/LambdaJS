@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { VisitorToAddActions } from "../src/actions";
+import { ActionCollector } from "../src/actions";
 
 import { ast } from "f-calculus";
 const { identifier, application, lambda, hole } = ast;
@@ -231,7 +231,7 @@ describe('actions', () => {
     }
 
     function actionsFor(subexpression, { inContextOf: expression, withOptions: options = defaultOptions }) {
-        const actions = new VisitorToAddActions(options).allActionsFor(expression)
+        const actions = new ActionCollector(options).allActionsFor(expression)
 
         return actions.get(subexpression)
     }

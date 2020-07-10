@@ -55,9 +55,7 @@ class VisitorHtml {
     }
 
     visitHole(holeElement) {
-        let element = htmlToElement(`<span class="hole">
-            <span class="actions"></span>
-        </span>`)
+        let element = htmlToElement(`<span class="hole"><span class="actions-container"><span class="actions"></span></span></span>`)
         element.astNode = holeElement
 
         this.addActionsTo(element)
@@ -102,7 +100,7 @@ class VisitorHtml {
 
     visitVariableToBeDefined(variable) {
         let element = htmlToElement(`<span class="variable-tbd"></span>`)
-        element.appendChild(htmlToElement(`<span tabindex="0" contenteditable="true" autocapitalize="none">&nbsp;</span>`))
+        element.appendChild(htmlToElement(`<span tabindex="0" contenteditable="true" autocapitalize="none">${variable.name}&nbsp;</span>`))
         element.astNode = variable
 
         on('click', element, () => {

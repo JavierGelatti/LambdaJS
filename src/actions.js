@@ -2,7 +2,7 @@ import { ast } from "f-calculus";
 
 const { identifier, application, lambda, hole } = ast;
 
-export class VisitorToAddActions {
+export class ActionCollector {
     constructor(options) {
         this.options = options
         this.holeActions = this.activeActionsFrom({
@@ -85,7 +85,7 @@ export class VisitorToAddActions {
     visitLambda(abstraction) {
         this.actions = new Map([
             ...this.actions,
-            ...new VisitorToAddActionsForParameters(this.options).allActionsFor(abstraction.boundVariable)
+            ...new ParameterActionCollector(this.options).allActionsFor(abstraction.boundVariable)
         ])
         abstraction.body.accept(this)
 
@@ -124,9 +124,24 @@ export class VisitorToAddActions {
     }
 }
 
-class VisitorToAddActionsForParameters extends VisitorToAddActions {
+class ParameterActionCollector extends ActionCollector {
     constructor(options) {
         super(options)
         this.commonActions = {}
+    }
+
+    visitDefinedVariable(variable) {
+        this.registerActionsFor(variable, {
+            rename(selectedIdentifier, expression) {
+                const newVariable = identifier(selectedIdentifier.name)
+                newVariable.beingEdited = true
+                return {
+                    expression: expression.replace(selectedIdentifier, newVariable),
+                    selection: newVariable,
+                }
+            }
+        })
+
+        return variable
     }
 }
