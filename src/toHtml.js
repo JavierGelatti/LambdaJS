@@ -1,3 +1,5 @@
+const { ast: { identifier } } = require('f-calculus')
+
 if (typeof document === 'undefined') {
     const { JSDOM } = require('js' + 'dom') // Don't use browserify here
     document = new JSDOM(`<!DOCTYPE html>`).window.document
@@ -110,6 +112,16 @@ class VisitorHtml {
         let element = htmlToElement(`<span class="variable-tbd"></span>`)
         element.appendChild(htmlToElement(`<span tabindex="0" contenteditable="true" autocapitalize="none">&nbsp;</span>`))
         element.astNode = variable
+
+        on('click', element, () => {
+            // Do nothing
+        })
+        on('keypress', element, event => {
+            if (event.keyCode !== 13) return;
+
+            this.editor.updateExpression(this.editor.expression.replace(variable, identifier(element.innerText.trim())))
+        })
+
         return element
     }
 }

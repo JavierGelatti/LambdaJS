@@ -1,5 +1,5 @@
 const { toHtml } = require('./toHtml')
-const { parse, ast: { identifier, application, lambda, hole } } = require('f-calculus')
+const { parse } = require('f-calculus')
 const { VisitorToAddActions } = require('./actions')
 
 const parseExpression = parse
@@ -80,17 +80,6 @@ class Editor {
         }
 
         this.setUpActionsOn('.hole, .abstraction, .application, .variable')
-
-        this.expressionContainer.querySelectorAll('.variable-tbd').forEach(element => {
-            on('click', element, () => {
-                // Do nothing
-            })
-            on('keypress', element, event => {
-                if (event.keyCode === 13) {
-                    this.updateExpression(this.expression.replace(element.astNode, identifier(element.innerText.trim())))
-                }
-            })
-        })
     }
 
     bindTo(container) {
