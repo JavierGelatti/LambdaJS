@@ -21,7 +21,7 @@ exports[`HTML toHtml 1`] = `
             <span class=\\"actions\\">
             <span class=\\"delete\\"></span><span class=\\"wrapLambda\\"></span><span class=\\"wrapApplicationArgument\\"></span><span class=\\"wrapApplicationFunction\\"></span></span>
         </span><span class=\\"parameter\\"><span class=\\"variable\\"><span class=\\"actions-container\\">
-            <span class=\\"actions\\"></span>
+            <span class=\\"actions\\"><span class=\\"rename\\"></span></span>
         </span>x</span></span><span class=\\"body\\"><span class=\\"application\\"><span class=\\"actions-container\\">
             <span class=\\"actions\\">
             <span class=\\"delete\\"></span><span class=\\"wrapLambda\\"></span><span class=\\"wrapApplicationArgument\\"></span><span class=\\"wrapApplicationFunction\\"></span></span>
@@ -33,10 +33,8 @@ exports[`HTML toHtml 1`] = `
             <span class=\\"actions\\">
             <span class=\\"delete\\"></span><span class=\\"wrapLambda\\"></span><span class=\\"wrapApplicationArgument\\"></span><span class=\\"wrapApplicationFunction\\"></span></span>
         </span><span class=\\"parameter\\"><span class=\\"variable\\"><span class=\\"actions-container\\">
-            <span class=\\"actions\\"></span>
-        </span>y</span></span><span class=\\"body\\"><span class=\\"hole\\">
-            <span class=\\"actions\\"><span class=\\"insertVariable\\"></span><span class=\\"insertAbstraction\\"></span><span class=\\"insertApplication\\"></span></span>
-        </span></span></span></span></span></span>
+            <span class=\\"actions\\"><span class=\\"rename\\"></span></span>
+        </span>y</span></span><span class=\\"body\\"><span class=\\"hole\\"><span class=\\"actions-container\\"><span class=\\"actions\\"><span class=\\"insertVariable\\"></span><span class=\\"insertAbstraction\\"></span><span class=\\"insertApplication\\"></span></span></span></span></span></span></span></span></span>
             <span class=\\"actions\\">
             <button name=\\"evaluate\\">¡Evaluar!</button>
         </span>

@@ -1,5 +1,5 @@
 const { ast: { identifier, application, infixApplication, lambda, letExpression, number, hole } } = require('f-calculus')
-const { VisitorToAddActions } = require('../src/actions')
+const { ActionCollector } = require('../src/actions')
 
 describe('actions', () => {
     describe('delete', () => {
@@ -228,7 +228,7 @@ describe('actions', () => {
     }
 
     function actionsFor(subexpression, { inContextOf: expression, withOptions: options = defaultOptions }) {
-        const actions = new VisitorToAddActions(options).allActionsFor(expression)
+        const actions = new ActionCollector(options).allActionsFor(expression)
 
         return actions.get(subexpression)
     }

@@ -1,6 +1,6 @@
 const { toHtml } = require('./toHtml')
 const { parse } = require('f-calculus')
-const { VisitorToAddActions } = require('./actions')
+const { ActionCollector } = require('./actions')
 
 function on(event, element, handler) {
     if (element === null) return
@@ -35,7 +35,7 @@ class Editor {
 
     setExpression(expression) {
         this.expression = expression
-        this.actions = new VisitorToAddActions(this.options).allActionsFor(this.expression)
+        this.actions = new ActionCollector(this.options).allActionsFor(this.expression)
         this.selectedNode = null
         if (expression.toString() === 'pepe') {
             this.container.classList.add('success')
