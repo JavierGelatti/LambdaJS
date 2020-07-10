@@ -2,8 +2,6 @@ const { toHtml } = require('./toHtml')
 const { parse } = require('f-calculus')
 const { VisitorToAddActions } = require('./actions')
 
-const parseExpression = parse
-
 function on(event, element, handler) {
     if (element === null) return
     element.addEventListener(event, event => {
@@ -93,7 +91,7 @@ class Editor {
             wrapApplicationArgument: !this.container.classList.contains('only-variables'),
             wrapApplicationFunction: !this.container.classList.contains('only-variables'),
         }
-        this.setExpression(parseExpression(this.container.innerText.trim()))
+        this.setExpression(parse(this.container.innerText.trim()))
 
         const showUndoAndRedo = !this.container.classList.contains('without-undo')
         const undoAndRedo = `<span class="actions">
