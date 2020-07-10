@@ -38,8 +38,8 @@ describe('actions', () => {
 
             expect(runAction('wrapLambda', { on: targetExpression, inContextOf: expression }))
                 .toEqual({
-                    expression: lambda(identifier("x"), lambda(hole(), identifier("y"))),
-                    selection: hole()
+                    expression: lambda(identifier("x"), lambda(identifierBeingEdited(), identifier("y"))),
+                    selection: identifierBeingEdited()
                 })
         })
 

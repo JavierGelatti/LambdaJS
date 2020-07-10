@@ -1,9 +1,13 @@
-const { parse } = require('f-calculus')
-const { toHtml } = require('../src/toHtml')
+const { Editor } = require('../src/editor')
 
 describe('HTML', () => {
     test('toHtml', () => {
-        const expression = parse('(λx.x x) (λy._)')
-        expect(toHtml(expression).outerHTML).toMatchSnapshot()
+        const container = document.createElement('div')
+        container.innerText = '(λx.x x) (λy._)'
+        const editor = new Editor()
+        editor.bindTo(container)
+        editor.render()
+
+        expect(container.outerHTML).toMatchSnapshot()
     })
 })

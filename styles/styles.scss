@@ -88,8 +88,11 @@
     }
 
     .parameter .variable {
-      padding: 0;
-      background: transparent;
+      padding: 0 .1em;
+
+      &:not(.hovered) {
+        background: transparent;
+      }
     }
 
     .abstraction, .application {

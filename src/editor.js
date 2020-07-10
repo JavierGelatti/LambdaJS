@@ -1,5 +1,6 @@
 const { toHtml } = require('./toHtml')
 const { parse, ast: { identifier, application, lambda, hole } } = require('f-calculus')
+const { VisitorToAddActions } = require('./actions')
 
 const parseExpression = parse
 
@@ -36,6 +37,7 @@ class Editor {
 
     setExpression(expression) {
         this.expression = expression
+        this.actions = new VisitorToAddActions(this.options).allActionsFor(this.expression)
         this.selectedNode = null
         if (expression.toString() === 'pepe') {
             this.container.classList.add('success')
@@ -50,15 +52,15 @@ class Editor {
             on('mouseout', element, () => {
                 element.classList.remove('hovered')
             })
-            on('click', element, () => {
-                if (element.classList.contains('active')) {
-                    this.deactivateAllNodes()
-                } else {
-                    this.deactivateAllNodes()
-                    element.classList.add('active')
-                }
-            })
         })
+    }
+
+    actionsFor(expression) {
+        return this.actions.get(expression)
+    }
+
+    selectNode(node) {
+        this.selectedNode = (this.selectedNode === node) ? null : node
     }
 
     deactivateAllNodes() {
@@ -68,16 +70,7 @@ class Editor {
 
     render() {
         this.expressionContainer.innerHTML = ''
-        const options = {
-            insertVariable: true,
-            insertAbstraction: !this.container.classList.contains('only-variables'),
-            insertApplication: !this.container.classList.contains('only-variables'),
-            delete: true,
-            wrapLambda: !this.container.classList.contains('only-variables'),
-            wrapApplicationArgument: !this.container.classList.contains('only-variables'),
-            wrapApplicationFunction: !this.container.classList.contains('only-variables'),
-        }
-        this.expressionContainer.appendChild(toHtml(this.expression, this, options))
+        this.expressionContainer.appendChild(toHtml(this.expression, this, this.options))
 
         const selectedElement = Array.from(this.expressionContainer.querySelectorAll("*")).
             find(element => element.astNode === this.selectedNode)
@@ -86,8 +79,7 @@ class Editor {
             selectedElement.firstChild.focus()
         }
 
-        this.setUpActionsOn('.hole')
-        this.setUpActionsOn('.abstraction, .application, *:not(.parameter) > .variable')
+        this.setUpActionsOn('.hole, .abstraction, .application, .variable')
 
         this.expressionContainer.querySelectorAll('.variable-tbd').forEach(element => {
             on('click', element, () => {
@@ -103,7 +95,16 @@ class Editor {
 
     bindTo(container) {
         this.container = container
-        this.expression = parseExpression(this.container.innerText.trim())
+        this.options = {
+            insertVariable: true,
+            insertAbstraction: !this.container.classList.contains('only-variables'),
+            insertApplication: !this.container.classList.contains('only-variables'),
+            delete: true,
+            wrapLambda: !this.container.classList.contains('only-variables'),
+            wrapApplicationArgument: !this.container.classList.contains('only-variables'),
+            wrapApplicationFunction: !this.container.classList.contains('only-variables'),
+        }
+        this.setExpression(parseExpression(this.container.innerText.trim()))
 
         const showUndoAndRedo = !this.container.classList.contains('without-undo')
         const undoAndRedo = `<span class="actions">

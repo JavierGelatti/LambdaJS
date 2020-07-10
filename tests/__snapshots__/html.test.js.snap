@@ -1,14 +1,27 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`HTML toHtml 1`] = `
-"<span class=\\"application\\"><span class=\\"actions-container\\">
+"<div>
+            <span class=\\"actions\\">
+            <button name=\\"undo\\" title=\\"Undo\\" disabled=\\"\\">
+                <svg version=\\"1.1\\" xmlns=\\"http://www.w3.org/2000/svg\\" viewBox=\\"0 0 485.215 485.215\\">
+                    <path d=\\"M257.751,113.708c-74.419,0-140.281,35.892-181.773,91.155L0,128.868v242.606h242.606l-82.538-82.532c21.931-66.52,84.474-114.584,158.326-114.584c92.161,0,166.788,74.689,166.788,166.795C485.183,215.524,383.365,113.708,257.751,113.708z\\"></path>
+                </svg>
+            </button>
+            <button name=\\"redo\\" title=\\"Redo\\" disabled=\\"\\">
+                <svg version=\\"1.1\\" xmlns=\\"http://www.w3.org/2000/svg\\" viewBox=\\"0 0 485.215 485.215\\">
+                    <path d=\\"M227.443,113.724c74.421,0,140.283,35.892,181.773,91.155l75.999-75.994v242.606H242.592l82.523-82.532c-21.921-66.52-84.465-114.584-158.326-114.584C74.659,174.375,0,249.064,0,341.17C0,215.541,101.817,113.724,227.443,113.724z\\"></path>
+                </svg>
+            </button>
+        </span>
+            <span class=\\"expression\\"><span class=\\"application\\"><span class=\\"actions-container\\">
             <span class=\\"actions\\">
             <span class=\\"delete\\"></span><span class=\\"wrapLambda\\"></span><span class=\\"wrapApplicationArgument\\"></span><span class=\\"wrapApplicationFunction\\"></span></span>
         </span><span class=\\"function\\"><span class=\\"abstraction\\"><span class=\\"actions-container\\">
             <span class=\\"actions\\">
             <span class=\\"delete\\"></span><span class=\\"wrapLambda\\"></span><span class=\\"wrapApplicationArgument\\"></span><span class=\\"wrapApplicationFunction\\"></span></span>
         </span><span class=\\"parameter\\"><span class=\\"variable\\"><span class=\\"actions-container\\">
-            <span class=\\"actions\\"><span class=\\"delete\\"></span><span class=\\"wrapLambda\\"></span><span class=\\"wrapApplicationArgument\\"></span><span class=\\"wrapApplicationFunction\\"></span></span>
+            <span class=\\"actions\\"></span>
         </span>x</span></span><span class=\\"body\\"><span class=\\"application\\"><span class=\\"actions-container\\">
             <span class=\\"actions\\">
             <span class=\\"delete\\"></span><span class=\\"wrapLambda\\"></span><span class=\\"wrapApplicationArgument\\"></span><span class=\\"wrapApplicationFunction\\"></span></span>
@@ -20,8 +33,12 @@ exports[`HTML toHtml 1`] = `
             <span class=\\"actions\\">
             <span class=\\"delete\\"></span><span class=\\"wrapLambda\\"></span><span class=\\"wrapApplicationArgument\\"></span><span class=\\"wrapApplicationFunction\\"></span></span>
         </span><span class=\\"parameter\\"><span class=\\"variable\\"><span class=\\"actions-container\\">
-            <span class=\\"actions\\"><span class=\\"delete\\"></span><span class=\\"wrapLambda\\"></span><span class=\\"wrapApplicationArgument\\"></span><span class=\\"wrapApplicationFunction\\"></span></span>
+            <span class=\\"actions\\"></span>
         </span>y</span></span><span class=\\"body\\"><span class=\\"hole\\">
             <span class=\\"actions\\"><span class=\\"insertVariable\\"></span><span class=\\"insertAbstraction\\"></span><span class=\\"insertApplication\\"></span></span>
-        </span></span></span></span></span>"
+        </span></span></span></span></span></span>
+            <span class=\\"actions\\">
+            <button name=\\"evaluate\\">¡Evaluar!</button>
+        </span>
+        </div>"
 `;

@@ -1,5 +1,3 @@
-const { VisitorToAddActions } = require('./actions')
-
 if (typeof document === 'undefined') {
     const { JSDOM } = require('js' + 'dom') // Don't use browserify here
     document = new JSDOM(`<!DOCTYPE html>`).window.document
@@ -12,7 +10,6 @@ class VisitorHtml {
     }
 
     toHtml(expression) {
-        this.actions = new VisitorToAddActions(this.options).allActionsFor(expression)
         return expression.accept(this)
     }
 
@@ -73,8 +70,9 @@ class VisitorHtml {
     }
 
     addActionsTo(element) {
+        if (this.editor.selectedNode == element.astNode) element.classList.add('active')
         const actionsContainer = element.querySelector('.actions')
-        const actionsForElement = this.actions.get(element.astNode)
+        const actionsForElement = this.editor.actionsFor(element.astNode)
         for (const action in actionsForElement) {
             const actionButton = document.createElement('span')
             actionButton.classList.add(action)
@@ -84,6 +82,14 @@ class VisitorHtml {
             })
             actionsContainer.appendChild(actionButton)
         }
+
+        on('click', element, () => {
+            this.editor.deactivateAllNodes()
+            if (this.editor.selectedNode !== element.astNode) {
+                element.classList.add('active')
+            }
+            this.editor.selectNode(element.astNode)
+        })
     }
 
     visitVariable(variable) {

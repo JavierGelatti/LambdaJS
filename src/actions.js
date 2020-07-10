@@ -37,7 +37,8 @@ class VisitorToAddActions {
                 }
             },
             wrapLambda(node, expression) {
-                const newVariable = hole()
+                const newVariable = identifier("")
+                newVariable.beingEdited = true
                 return {
                     expression: expression.replace(node, lambda(newVariable, node)),
                     selection: newVariable,
