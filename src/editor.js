@@ -42,7 +42,7 @@ class Editor {
         }
     }
 
-    setUpActionsOn(selector, actions) {
+    setUpActionsOn(selector) {
         this.expressionContainer.querySelectorAll(selector).forEach(element => {
             on('click', element, () => {
                 if (element.classList.contains('active')) {
@@ -52,19 +52,6 @@ class Editor {
                     element.classList.add('active')
                 }
             })
-            on('mouseover', element, () => {
-                element.classList.add('hovered')
-            })
-            on('mouseout', element, () => {
-                element.classList.remove('hovered')
-            })
-
-            for (const action in actions) {
-                onClick(element.querySelector('.' + action), () => {
-                    let result = actions[action](element.astNode, this.expression)
-                    this.updateExpression(result['expression'], result['selection'])
-                })
-            }
         })
     }
 
@@ -84,7 +71,7 @@ class Editor {
             wrapApplicationArgument: !this.container.classList.contains('only-variables'),
             wrapApplicationFunction: !this.container.classList.contains('only-variables'),
         }
-        this.expressionContainer.appendChild(toHtml(this.expression, options))
+        this.expressionContainer.appendChild(toHtml(this.expression, this, options))
 
         const selectedElement = Array.from(this.expressionContainer.querySelectorAll("*")).
             find(element => element.astNode === this.selectedNode)
@@ -93,62 +80,8 @@ class Editor {
             selectedElement.firstChild.focus()
         }
 
-        this.setUpActionsOn('.hole', {
-            'insert-variable': (selectedHole, expression) => {
-                const newVariable = identifier("")
-                newVariable.beingEdited = true
-                return {
-                    expression: expression.replace(selectedHole, newVariable),
-                    selection: newVariable,
-                }
-            },
-            'insert-abstraction': (selectedHole, expression) => {
-                const newVariable = identifier("")
-                newVariable.beingEdited = true
-                return {
-                    expression: expression.replace(selectedHole, lambda(newVariable, hole())),
-                    selection: newVariable,
-                }
-            },
-            'insert-application': (selectedHole, expression) => {
-                const abstractionHole = hole()
-                return {
-                    expression: expression.replace(selectedHole, application(abstractionHole, hole())),
-                    selection: abstractionHole,
-                }
-            }
-        })
-
-        this.setUpActionsOn('.abstraction, .application, *:not(.parameter) > .variable', {
-            'delete': (node, expression) => {
-                const newHole = hole()
-                return {
-                    expression: expression.replace(node, newHole),
-                    selection: newHole,
-                }
-            },
-            'wrap-lambda': (node, expression) => {
-                const newVariable = hole()
-                return {
-                    expression: expression.replace(node, lambda(newVariable, node)),
-                    selection: newVariable,
-                }
-            },
-            'wrap-application-argument': (node, expression) => {
-                const newHole = hole()
-                return {
-                    expression: expression.replace(node, application(newHole, node)),
-                    selection: newHole,
-                }
-            },
-            'wrap-application-function': (node, expression) => {
-                const newHole = hole()
-                return {
-                    expression: expression.replace(node, application(node, newHole)),
-                    selection: newHole,
-                }
-            },
-        })
+        this.setUpActionsOn('.hole')
+        this.setUpActionsOn('.abstraction, .application, *:not(.parameter) > .variable')
 
         this.expressionContainer.querySelectorAll('.variable-tbd').forEach(element => {
             on('click', element, () => {

@@ -1,4 +1,4 @@
-const { ast: { hole } } = require('f-calculus')
+const { VisitorToAddActions } = require('./actions')
 
 if (typeof document === 'undefined') {
     const { JSDOM } = require('js' + 'dom') // Don't use browserify here
@@ -6,17 +6,22 @@ if (typeof document === 'undefined') {
 }
 
 class VisitorHtml {
-    constructor(options) {
+    constructor(options, editor) {
         this.options = options
+        this.editor = editor
     }
 
     toHtml(expression) {
+        new VisitorToAddActions(this.options).addActionsTo(expression)
         return expression.accept(this)
     }
 
     visitLambda(abstraction) {
         let parameterElement = htmlToElement(`<span class="parameter"></span>`)
-        parameterElement.appendChild(this.toHtml(abstraction.boundVariable))
+        parameterElement.appendChild(
+            new VisitorHtmlForParameters(this.options, this.editor)
+                .toHtml(abstraction.boundVariable)
+        )
 
         let bodyElement = htmlToElement(`<span class="body"></span>`)
         bodyElement.appendChild(this.toHtml(abstraction.body))
@@ -24,15 +29,13 @@ class VisitorHtml {
         let abstractionElement = htmlToElement(`<span class="abstraction"></span>`)
         abstractionElement.insertAdjacentHTML('beforeend', `<span class="actions-container">
             <span class="actions">
-                <span class="delete"></span>
-                <span class="wrap-lambda"></span>
-                <span class="wrap-application-argument"></span>
-                <span class="wrap-application-function"></span>
             </span>
         </span>`)
         abstractionElement.appendChild(parameterElement)
         abstractionElement.appendChild(bodyElement)
         abstractionElement.astNode = abstraction
+
+        this.addActionsTo(abstractionElement)
 
         return abstractionElement
     }
@@ -47,29 +50,39 @@ class VisitorHtml {
         let applicationElement = htmlToElement(`<span class="application"></span>`)
         applicationElement.insertAdjacentHTML('beforeend', `<span class="actions-container">
             <span class="actions">
-                <span class="delete"></span>
-                <span class="wrap-lambda"></span>
-                <span class="wrap-application-argument"></span>
-                <span class="wrap-application-function"></span>
             </span>
         </span>`)
         applicationElement.appendChild(functionElement)
         applicationElement.appendChild(argumentElement)
         applicationElement.astNode = application
 
+        this.addActionsTo(applicationElement)
+
         return applicationElement
     }
 
-    visitHole(hole) {
+    visitHole(holeElement) {
         let element = htmlToElement(`<span class="hole">
-            <span class="actions">
-                ${this.options.insertVariable ? '<span class="insert-variable"></span>' : ''}
-                ${this.options.insertAbstraction ? '<span class="insert-abstraction"></span>' : ''}
-                ${this.options.insertApplication ? '<span class="insert-application"></span>' : ''}
-            </span>
+            <span class="actions"></span>
         </span>`)
-        element.astNode = hole
+        element.astNode = holeElement
+
+        this.addActionsTo(element)
+
         return element
+    }
+
+    addActionsTo(element) {
+        const actionsContainer = element.querySelector('.actions')
+        for (const action in element.astNode.actions) {
+            const actionButton = document.createElement('span')
+            actionButton.classList.add(action)
+            onClick(actionButton, () => {
+                const result = element.astNode.actions[action](element.astNode, this.editor.expression)
+                this.editor.updateExpression(result['expression'], result['selection'])
+            })
+            actionsContainer.appendChild(actionButton)
+        }
     }
 
     visitVariable(variable) {
@@ -79,15 +92,13 @@ class VisitorHtml {
     visitDefinedVariable(variable) {
         let element = htmlToElement(`<span class="variable"></span>`)
         element.insertAdjacentHTML('beforeend', `<span class="actions-container">
-            <span class="actions">
-                ${this.options.delete ? '<span class="delete"></span>' : ''}
-                ${this.options.wrapLambda ? '<span class="wrap-lambda"></span>' : ''}
-                ${this.options.wrapApplicationArgument ? '<span class="wrap-application-argument"></span>' : ''}
-                ${this.options.wrapApplicationFunction ? '<span class="wrap-application-function"></span>' : ''}
-            </span>
+            <span class="actions"></span>
         </span>`)
         element.appendChild(document.createTextNode(variable.name))
         element.astNode = variable
+
+        this.addActionsTo(element)
+
         return element
     }
 
@@ -99,14 +110,31 @@ class VisitorHtml {
     }
 }
 
+class VisitorHtmlForParameters extends VisitorHtml {
+    commonActions() {
+        return {}
+    }
+}
+
+function onClick(element, handler) {
+    return on('click', element, handler)
+}
+
+function on(event, element, handler) {
+    element.addEventListener(event, event => {
+        handler(event)
+        event.stopPropagation()
+    })
+}
+
 function htmlToElement(html) {
     var template = document.createElement('template');
     template.innerHTML = html.trim();
     return template.content.firstChild;
 }
 
-function toHtml(expression, options = {}) {
-    return new VisitorHtml(options).toHtml(expression)
+function toHtml(expression, editor, options = {}) {
+    return new VisitorHtml(options, editor).toHtml(expression)
 }
 
 module.exports = { toHtml }

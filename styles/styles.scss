@@ -139,7 +139,7 @@
       height: .7em;
       cursor: pointer;
 
-      &.hovered {
+      &:hover {
         background-color: yellow;
       }
 
@@ -191,7 +191,7 @@
         visibility: hidden;
       }
 
-      &.hovered {
+      &:hover {
         background: #90ee9060;
       }
 
