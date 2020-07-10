@@ -15,10 +15,7 @@ class VisitorHtml {
 
     visitLambda(abstraction) {
         let parameterElement = htmlToElement(`<span class="parameter"></span>`)
-        parameterElement.appendChild(
-            new VisitorHtmlForParameters(this.options, this.editor)
-                .toHtml(abstraction.boundVariable)
-        )
+        parameterElement.appendChild(abstraction.boundVariable.accept(this))
 
         let bodyElement = htmlToElement(`<span class="body"></span>`)
         bodyElement.appendChild(abstraction.body.accept(this))
@@ -114,12 +111,6 @@ class VisitorHtml {
         element.appendChild(htmlToElement(`<span tabindex="0" contenteditable="true" autocapitalize="none">&nbsp;</span>`))
         element.astNode = variable
         return element
-    }
-}
-
-class VisitorHtmlForParameters extends VisitorHtml {
-    commonActions() {
-        return {}
     }
 }
 
