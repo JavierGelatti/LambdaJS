@@ -85,7 +85,7 @@ export class ActionCollector {
     visitLambda(abstraction) {
         this.actions = new Map([
             ...this.actions,
-            ...new ParameterActionCollector(this.options).allActionsFor(abstraction.boundVariable)
+            ...new ParameterActionCollector(abstraction, this.options).allActionsFor(abstraction.boundVariable)
         ])
         abstraction.body.accept(this)
 
@@ -125,16 +125,33 @@ export class ActionCollector {
 }
 
 class ParameterActionCollector extends ActionCollector {
-    constructor(options) {
+    constructor(lambda, options) {
         super(options)
+        this.lambda = lambda
         this.commonActions = {}
     }
 
     visitDefinedVariable(variable) {
+        const self = this
         this.registerActionsFor(variable, {
             rename(selectedIdentifier, expression) {
                 const newVariable = identifier(selectedIdentifier.name)
                 newVariable.beingEdited = true
+
+
+                const identifiersToReplace = self.lambda.body.freeVariables().filter(v => v.equals(selectedIdentifier))
+                newVariable.whenEditingFinishes = newName => (selectedIdentifier, expression) => {
+                    const newIdentifier = identifier(newName)
+                    const expressionWithNewBody = identifiersToReplace.reduce(
+                        (currentExpression, identifierToReplace) => currentExpression.replace(identifierToReplace, identifier(newName)),
+                        expression
+                    )
+                    return {
+                        expression: expressionWithNewBody.replace(selectedIdentifier, newIdentifier),
+                        selection: newIdentifier,
+                    }
+                }
+
                 return {
                     expression: expression.replace(selectedIdentifier, newVariable),
                     selection: newVariable,
