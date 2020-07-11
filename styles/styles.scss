@@ -78,17 +78,18 @@
             user-select: none;
         }
 
-    .variable-tbd > span {
-      min-width: 1em;
-      display: inline-block;
-      background: red;
-      cursor: text;
-      user-select: text !important;
-      &::selection {
-        color: white;
-        background: transparent;
-      }
-    }
+        .variable-tbd > span {
+            min-width: 1em;
+            display: inline-block;
+            background: red;
+            cursor: text;
+            user-select: text !important;
+
+            &::selection {
+                color: white;
+                background: transparent;
+            }
+        }
 
         .parameter .variable {
             padding: 0 .1em;
