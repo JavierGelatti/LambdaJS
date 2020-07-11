@@ -205,6 +205,62 @@ describe('actions', () => {
         })
     })
 
+    describe('rename', () => {
+        it('renames the lambda parameter', () => {
+            const targetExpression = identifier("x")
+            const expression = lambda(targetExpression, identifier("y"))
+
+            expect(rename("z", targetExpression, expression))
+                .toEqual({
+                    expression: lambda(identifier("z"), identifier("y")),
+                    selection: identifier("z")
+                })
+        })
+
+        it('renames the free ocurrences of the identifier in the lambda body', () => {
+            const targetExpression = identifier("x")
+            const expression = lambda(targetExpression, identifier("x"))
+
+            expect(rename("z", targetExpression, expression))
+                .toEqual({
+                    expression: lambda(identifier("z"), identifier("z")),
+                    selection: identifier("z")
+                })
+        })
+
+        it('does not rename the bound ocurrences of the identifier in the lambda body', () => {
+            const targetExpression = identifier("x")
+            const expression = lambda(targetExpression, lambda(identifier("x"), identifier("x")))
+
+            expect(rename("z", targetExpression, expression))
+                .toEqual({
+                    expression: lambda(identifier("z"), lambda(identifier("x"), identifier("x"))),
+                    selection: identifier("z")
+                })
+        })
+
+        it('does not rename the ocurrences of the identifier outside the lambda body', () => {
+            const targetExpression = identifier("x")
+            const expression = lambda(identifier("x"), lambda(targetExpression, identifier("y")))
+
+            expect(rename("z", targetExpression, expression))
+                .toEqual({
+                    expression: lambda(identifier("x"), lambda(identifier("z"), identifier("y"))),
+                    selection: identifier("z")
+                })
+        })
+
+        function renameActionFor(targetIdentifier, expression) {
+            const result = runAction('rename', { on: targetIdentifier, inContextOf: expression })
+
+            return result.selection.whenEditingFinishes
+        }
+
+        function rename(newName, targetIdentifier, expression) {
+            return renameActionFor(targetIdentifier, expression)(newName)(targetIdentifier, expression)
+        }
+    })
+
     function identifierBeingEdited(name = "") {
         const anIdentifier = identifier(name)
         anIdentifier.beingEdited = true

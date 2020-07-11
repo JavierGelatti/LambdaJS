@@ -75,7 +75,7 @@
       user-select: none;
     }
 
-    .variable-tbd > span {
+    .variable-tbd > * {
       min-width: 1em;
       display: inline-block;
       background: red;
@@ -220,8 +220,11 @@
       }
 
       .rename {
+        line-height: .86em;
+
         &::after {
-          content: 'rename';
+          font-size: .6em;
+          content: '✏️';
         }
       }
 

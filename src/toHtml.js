@@ -107,17 +107,34 @@ class VisitorHtml {
     }
 
     visitVariableToBeDefined(variable) {
-        let element = htmlToElement(`<span class="variable-tbd"></span>`)
-        element.appendChild(htmlToElement(`<span tabindex="0" contenteditable="true" autocapitalize="none">${variable.name}&nbsp;</span>`))
+        const element = htmlToElement(`<span class="variable-tbd"></span>`)
+        const inputElement = htmlToElement(`<span tabindex="0" contenteditable="true" autocapitalize="none">${variable.name}&nbsp;</span>`)
+        element.appendChild(inputElement)
         element.astNode = variable
+
+        const inputValue = () => inputElement.innerText.trim()
 
         on('click', element, () => {
             // Do nothing
         })
-        on('keypress', element, event => {
-            if (event.keyCode !== 13) return;
+        on('keypress', element.firstChild, event => {
+            if (event.keyCode !== 13) return
 
-            this.editor.updateExpression(this.editor.expression.replace(variable, identifier(element.innerText.trim())))
+            if (variable.whenEditingFinishes) {
+                const result = variable.whenEditingFinishes(inputValue())(variable, this.editor.expression)
+                this.editor.updateExpression(result['expression'], result['selection'])
+            } else {
+                this.editor.updateExpression(this.editor.expression.replace(variable, identifier(inputValue())))
+            }
+        })
+        on('input', element.firstChild, event => {
+            if (variable.whenEditingFinishes) {
+                const abstractionElement = event.target.closest('.abstraction')
+                const bodyElement = abstractionElement.querySelector('.body')
+                const result = variable.whenEditingFinishes(inputValue())(variable, abstractionElement.astNode.body)
+                bodyElement.innerHTML = ''
+                bodyElement.appendChild(toHtml(result['expression'], this.editor, this.options))
+            }
         })
 
         return element
