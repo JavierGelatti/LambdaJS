@@ -128,6 +128,10 @@ class VisitorHtml {
             }
         })
         on('input', element.firstChild, event => {
+            if (inputElement.innerHTML === '') {
+                inputElement.innerHTML = "&nbsp;"
+            }
+
             if (variable.whenEditingFinishes) {
                 const abstractionElement = event.target.closest('.abstraction')
                 const bodyElement = abstractionElement.querySelector('.body')
