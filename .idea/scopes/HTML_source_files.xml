@@ -1,3 +1,0 @@
-<component name="DependencyValidationManager">
-  <scope name="HTML source files" pattern="(file:src/*.html||file:src/*.md)&amp;&amp;!file:src/content.html" />
-</component>

@@ -1,5 +1,8 @@
-const { ast: { identifier, application, infixApplication, lambda, letExpression, number, hole } } = require('f-calculus')
-const { VisitorToAddActions } = require('../src/actions')
+import { describe, expect, it } from "vitest";
+import { VisitorToAddActions } from "../src/actions";
+
+import { ast } from "f-calculus";
+const { identifier, application, lambda, hole } = ast;
 
 describe('actions', () => {
     describe('delete', () => {

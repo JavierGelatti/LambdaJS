@@ -82,14 +82,8 @@ fabric.properties
 
 # End of https://www.gitignore.io/api/webstorm
 
+# IDE folder
+/.idea/
+
 # Node modules
 node_modules/
-
-# Generated sources
-/index.html
-/post.html
-/bundle.js
-/bundle.js.map
-/styles.css
-/styles.css.map
-/src/content.html

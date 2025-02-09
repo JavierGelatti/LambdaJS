@@ -1,9 +1,6 @@
-const { ast: { identifier } } = require('f-calculus')
+import { ast } from "f-calculus";
 
-if (typeof document === 'undefined') {
-    const { JSDOM } = require('js' + 'dom') // Don't use browserify here
-    document = new JSDOM(`<!DOCTYPE html>`).window.document
-}
+const { identifier } = ast;
 
 class VisitorHtml {
     constructor(options, editor) {
@@ -69,7 +66,6 @@ class VisitorHtml {
     }
 
     addActionsTo(element) {
-        if (this.editor.selectedNode == element.astNode) element.classList.add('active')
         const actionsContainer = element.querySelector('.actions')
         const actionsForElement = this.editor.actionsFor(element.astNode)
         for (const action in actionsForElement) {
@@ -83,10 +79,6 @@ class VisitorHtml {
         }
 
         on('click', element, () => {
-            this.editor.deactivateAllNodes()
-            if (this.editor.selectedNode !== element.astNode) {
-                element.classList.add('active')
-            }
             this.editor.selectNode(element.astNode)
         })
     }
@@ -153,8 +145,6 @@ const defaultOptions = {
     wrapApplicationFunction: true
 }
 
-function toHtml(expression, editor, options = defaultOptions) {
+export function toHtml(expression, editor, options = defaultOptions) {
     return new VisitorHtml(options, editor).toHtml(expression)
 }
-
-module.exports = { toHtml }

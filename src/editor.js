@@ -1,6 +1,6 @@
-const { toHtml } = require('./toHtml')
-const { parse } = require('f-calculus')
-const { VisitorToAddActions } = require('./actions')
+import { toHtml } from "./toHtml";
+import { parse } from "f-calculus";
+import { VisitorToAddActions } from "./actions";
 
 function on(event, element, handler) {
     if (element === null) return
@@ -14,7 +14,7 @@ function onClick(element, handler) {
     return on('click', element, handler)
 }
 
-class Editor {
+export class Editor {
     constructor() {
         this.undoQueue = []
         this.redoQueue = []
@@ -27,9 +27,12 @@ class Editor {
             this.redoQueue = []
             this.undoButton.disabled = false
             this.redoButton.disabled = true
+            this.selectNode(null)
             this.setExpression(newExpression)
-            this.selectedNode = selectedNode
             this.render()
+            setTimeout(() => {
+                this.selectNode(selectedNode)
+            }, 0)
         }
     }
 
@@ -37,9 +40,6 @@ class Editor {
         this.expression = expression
         this.actions = new VisitorToAddActions(this.options).allActionsFor(this.expression)
         this.selectedNode = null
-        if (expression.toString() === 'pepe') {
-            this.container.classList.add('success')
-        }
     }
 
     setUpActionsOn(selector) {
@@ -58,26 +58,30 @@ class Editor {
     }
 
     selectNode(node) {
-        this.selectedNode = (this.selectedNode === node) ? null : node
-    }
+        const currentSelectedNodeElement = this._elementForNode(this.selectedNode)
+        currentSelectedNodeElement?.classList.remove('active')
 
-    deactivateAllNodes() {
-        this.expressionContainer.querySelectorAll('.active').
-        forEach(a => a.classList.remove('active'))
+        this.selectedNode = (this.selectedNode === node) ? null : node
+
+        const newSelectedNodeElement = this._elementForNode(this.selectedNode)
+        newSelectedNodeElement?.firstChild.focus?.()
+        newSelectedNodeElement?.classList.add('active')
     }
 
     render() {
         this.expressionContainer.innerHTML = ''
         this.expressionContainer.appendChild(toHtml(this.expression, this, this.options))
 
-        const selectedElement = Array.from(this.expressionContainer.querySelectorAll("*")).
-            find(element => element.astNode === this.selectedNode)
-
-        if (selectedElement && selectedElement.firstChild && selectedElement.firstChild.focus) {
-            selectedElement.firstChild.focus()
-        }
+        const selectedElement = this._elementForNode(this.selectedNode)
+        selectedElement?.firstChild.focus?.()
+        selectedElement?.classList.add('active')
 
         this.setUpActionsOn('.hole, .abstraction, .application, .variable')
+    }
+
+    _elementForNode(node) {
+        return Array.from(this.expressionContainer.querySelectorAll("*")).
+            find(element => element.astNode === node);
     }
 
     bindTo(container) {
@@ -96,12 +100,12 @@ class Editor {
         const showUndoAndRedo = !this.container.classList.contains('without-undo')
         const undoAndRedo = `<span class="actions">
             <button name="undo" title="Undo" disabled>
-                <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 485.215 485.215">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 485.215 485.215">
                     <path d="M257.751,113.708c-74.419,0-140.281,35.892-181.773,91.155L0,128.868v242.606h242.606l-82.538-82.532c21.931-66.52,84.474-114.584,158.326-114.584c92.161,0,166.788,74.689,166.788,166.795C485.183,215.524,383.365,113.708,257.751,113.708z"/>
                 </svg>
             </button>
             <button name="redo" title="Redo" disabled>
-                <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 485.215 485.215">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 485.215 485.215">
                     <path d="M227.443,113.724c74.421,0,140.283,35.892,181.773,91.155l75.999-75.994v242.606H242.592l82.523-82.532c-21.921-66.52-84.465-114.584-158.326-114.584C74.659,174.375,0,249.064,0,341.17C0,215.541,101.817,113.724,227.443,113.724z"/>
                 </svg>
             </button>
@@ -119,7 +123,7 @@ class Editor {
         this.redoButton = this.container.querySelector("button[name='redo']") || document.createElement('button')
         this.expressionContainer = this.container.querySelector(".expression")
 
-        document.body.addEventListener('click', () => this.deactivateAllNodes())
+        document.body.addEventListener('click', () => this.selectNode(null))
 
         onClick(this.container.querySelector("button[name='evaluate']"), () => {
             this.updateExpression(this.expression.fullBetaReduce())
@@ -144,5 +148,3 @@ class Editor {
         this.render()
     }
 }
-
-module.exports = { Editor }

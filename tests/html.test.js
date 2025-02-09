@@ -1,4 +1,7 @@
-const { Editor } = require('../src/editor')
+// @vitest-environment jsdom
+
+import { describe, expect, test } from "vitest";
+import { Editor } from "../src/editor";
 
 describe('HTML', () => {
     test('toHtml', () => {

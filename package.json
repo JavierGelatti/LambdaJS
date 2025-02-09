@@ -3,43 +3,19 @@
   "version": "1.0.0",
   "description": "",
   "main": "script.js",
-  "directories": {
-    "test": "tests"
+  "scripts": {
+    "dev": "vite --host --port 8080",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "vitest"
   },
   "dependencies": {
-    "arcsecond": "^1.4.0",
-    "f-calculus": "github:javiergelatti/f-calculus#f211b88164c8d17d522b5c47933f56ffb08a29d1",
-    "html-import-partials": "^1.0.1"
+    "f-calculus": "github:javiergelatti/f-calculus#f211b88164c8d17d522b5c47933f56ffb08a29d1"
   },
   "devDependencies": {
-    "@babel/cli": "^7.10.4",
-    "@babel/core": "^7.10.4",
-    "@babel/preset-env": "^7.10.4",
-    "autoprefixer": "^9.8.4",
-    "babelify": "^10.0.0",
-    "browserify": "^16.5.1",
-    "jest": "^26.1.0",
-    "jsdom": "^13.2.0",
-    "marked": "^1.1.0",
-    "node-sass": "^4.14.1",
-    "postcss-cli": "^7.1.1",
-    "uglify-js": "^3.10.0"
-  },
-  "browserslist": "> 1%",
-  "scripts": {
-    "build_dev_sass": "node-sass styles/styles.scss --source-map-embed --output .",
-    "build_sass": "node-sass styles/styles.scss --output-style compressed --output .",
-    "prefix_dev_css": "postcss styles.css --replace --map --use autoprefixer",
-    "prefix_css": "postcss styles.css --replace --no-map --use autoprefixer",
-    "build_dev_css": "npm run build_dev_sass && npm run prefix_dev_css",
-    "build_css": "npm run build_sass && npm run prefix_css",
-    "build_markdown": "marked --output src/content.html src/content.md",
-    "build_html": "npm run build_markdown && html-import-partials src/index.html src/post.html --out .",
-    "build_dev_js": "browserify -d -t [ babelify --global --presets [ @babel/preset-env ] ] --outfile bundle.js script.js",
-    "dev_build": "npm run build_dev_js && npm run build_dev_css && npm run build_html",
-    "uglify": "uglifyjs --compress --mangle --output bundle.js -- bundle.js",
-    "build": "npm run build_dev_js && npm run uglify && npm run build_css && npm run build_html",
-    "test": "jest"
+    "jsdom": "^26.0.0",
+    "vite": "^6.0.7",
+    "vitest": "^3.0.2"
   },
   "author": "Facundo Javier Gelatti",
   "license": "ISC"

@@ -1,6 +1,8 @@
-const { ast: { identifier, application, lambda, hole } } = require('f-calculus')
+import { ast } from "f-calculus";
 
-class VisitorToAddActions {
+const { identifier, application, lambda, hole } = ast;
+
+export class VisitorToAddActions {
     constructor(options) {
         this.options = options
         this.holeActions = this.activeActionsFrom({
@@ -128,5 +130,3 @@ class VisitorToAddActionsForParameters extends VisitorToAddActions {
         this.commonActions = {}
     }
 }
-
-module.exports = { VisitorToAddActions }
