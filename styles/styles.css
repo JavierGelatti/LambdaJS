@@ -94,7 +94,7 @@
         .parameter .variable {
             padding: 0 .1em;
 
-            &:not(.hovered) {
+            &:not(.hovered, .active) {
                 background: transparent;
             }
         }
