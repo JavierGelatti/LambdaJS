@@ -123,7 +123,7 @@ export class Editor {
         this.redoButton = this.container.querySelector("button[name='redo']") || document.createElement('button')
         this.expressionContainer = this.container.querySelector(".expression")
 
-        document.body.addEventListener('click', () => this.selectNode(null))
+        document.documentElement.addEventListener('click', () => this.selectNode(null))
 
         onClick(this.container.querySelector("button[name='evaluate']"), () => {
             this.updateExpression(this.expression.fullBetaReduce())
