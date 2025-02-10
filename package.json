@@ -10,7 +10,7 @@
     "test": "vitest"
   },
   "dependencies": {
-    "f-calculus": "github:javiergelatti/f-calculus#f211b88164c8d17d522b5c47933f56ffb08a29d1"
+    "f-calculus": "github:javiergelatti/f-calculus#aea1b96d390d19baf0a030e2cf0571c42cf1c7e4"
   },
   "devDependencies": {
     "jsdom": "^26.0.0",
